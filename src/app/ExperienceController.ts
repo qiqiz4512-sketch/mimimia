@@ -30,19 +30,22 @@ interface ExperienceControllerOptions {
   debugPanel?: DebugPanel;
   debugFrame?: DebugFrameState;
   onFrameRendered?: (signals: FrameSignals) => void;
+  onRenderFailure?: (error: unknown) => void;
 }
 
 export class ExperienceController {
-  readonly #canvas: HTMLCanvasElement;
+  #canvas: HTMLCanvasElement;
+  readonly #uiRoot: HTMLElement;
   readonly #ui: AppUI;
-  readonly #runtime: ExperienceRuntime;
+  #runtime: ExperienceRuntime;
   readonly #qualityController: QualityController;
   readonly #debugPanel?: DebugPanel;
   #quality: QualityTier;
   readonly #machine = new ExperienceMachine();
   readonly #debugFrame?: DebugFrameState;
   readonly #onFrameRendered?: (signals: FrameSignals) => void;
-  readonly #input: PointerInput | null;
+  readonly #onRenderFailure?: (error: unknown) => void;
+  #input: PointerInput | null;
   #pointerNdc: NormalizedPointerPosition = { x: 0, y: 0 };
   #active = false;
   #disposed = false;
@@ -51,9 +54,12 @@ export class ExperienceController {
   #hintVisible = false;
   #hintStartedAt: number | null = null;
   #qualityNoticeUntil = 0;
+  #graphicsHealthy = true;
+  #recovering = false;
 
   constructor(options: ExperienceControllerOptions) {
     this.#canvas = options.canvas;
+    this.#uiRoot = options.uiRoot;
     this.#ui = options.ui;
     this.#runtime = options.runtime;
     this.#qualityController = options.qualityController;
@@ -61,6 +67,7 @@ export class ExperienceController {
     this.#debugPanel = options.debugPanel;
     this.#debugFrame = options.debugFrame;
     this.#onFrameRendered = options.onFrameRendered;
+    this.#onRenderFailure = options.onRenderFailure;
     this.#pointerNdc = options.debugFrame?.pointerNdc ?? { x: 0, y: 0 };
     this.#ui.setActionHandler(this.#handleAction);
 
@@ -68,17 +75,16 @@ export class ExperienceController {
       this.#input = null;
     } else {
       this.#machine.dispatch({ type: 'ASSETS_READY' }, performance.now());
-      this.#input = new PointerInput(options.canvas, options.uiRoot, {
-        getState: () => this.state(),
-        dispatch: this.#dispatchInput,
-        onPointerMove: (position) => { this.#pointerNdc = position; },
-      });
+      this.#input = this.#createPointerInput(options.canvas);
     }
     window.addEventListener('resize', this.#resize);
+    window.addEventListener('blur', this.#clearQualitySampling);
+    document.addEventListener('visibilitychange', this.#clearQualitySampling);
     this.#resize();
   }
 
   state(): ExperienceState {
+    if (this.#recovering) return 'loading';
     return this.#debugFrame?.state ?? this.#machine.snapshot().state;
   }
 
@@ -96,8 +102,78 @@ export class ExperienceController {
     cancelAnimationFrame(this.#animationFrame);
     this.#animationFrame = 0;
     window.removeEventListener('resize', this.#resize);
+    window.removeEventListener('blur', this.#clearQualitySampling);
+    document.removeEventListener('visibilitychange', this.#clearQualitySampling);
     this.#input?.dispose();
     this.#runtime.dispose();
+  }
+
+  resetExperience(): void {
+    const nowMs = performance.now();
+    if (this.#machine.snapshot().state !== 'complete') return;
+    this.#machine.dispatch({ type: 'RESET' }, nowMs);
+    this.#clearSpellResidue();
+    this.#hintVisible = false;
+    this.#hintStartedAt = null;
+    document.body.dataset.experienceState = 'resetting';
+  }
+
+  beginGraphicsRecovery(): void {
+    if (this.#disposed || this.#recovering) return;
+    this.#recovering = true;
+    this.#graphicsHealthy = false;
+    this.#active = false;
+    cancelAnimationFrame(this.#animationFrame);
+    this.#animationFrame = 0;
+    this.#qualityController.clearSampling();
+    this.#runtime.stage.reset();
+    this.#runtime.audio.reset();
+    this.#machine.dispatch({ type: 'RECOVER' }, performance.now());
+    document.body.dataset.graphicsRecovery = 'recovering';
+    document.body.dataset.experienceState = 'loading';
+    this.#ui.render({
+      state: 'loading', progress: 1, muted: true, quality: this.#quality,
+      error: null, readyToEnter: false, recovering: true,
+    });
+  }
+
+  completeGraphicsRecovery(runtime: ExperienceRuntime, canvas: HTMLCanvasElement): void {
+    if (this.#disposed) {
+      runtime.dispose();
+      return;
+    }
+    this.#runtime = runtime;
+    if (canvas !== this.#canvas) {
+      this.#input?.dispose();
+      this.#canvas = canvas;
+      this.#input = this.#debugFrame ? null : this.#createPointerInput(canvas);
+    }
+    this.#runtime.stage.reset();
+    this.#machine.dispatch({ type: 'RECOVER' }, performance.now());
+    this.#recovering = false;
+    this.#graphicsHealthy = true;
+    this.#canvas.hidden = false;
+    document.body.dataset.graphicsRecovery = 'healthy';
+    void this.#runtime.audio.unlock();
+    this.#resize();
+    this.start();
+  }
+
+  failGraphicsRecovery(): void {
+    if (this.#disposed) return;
+    this.#recovering = false;
+    this.#graphicsHealthy = false;
+    this.#canvas.hidden = true;
+    document.body.dataset.graphicsRecovery = 'failed';
+    document.body.dataset.experienceState = 'loading';
+    this.#ui.render({
+      state: 'loading', progress: 1, muted: true, quality: this.#quality,
+      error: {
+        message: '月光通路需要重新连接',
+        detail: '图形环境未能恢复，请重新进入仪式。',
+        action: 'reenter',
+      },
+    });
   }
 
   readonly #dispatchInput = (event: ExperienceEvent, nowMs: number): void => {
@@ -118,9 +194,7 @@ export class ExperienceController {
     } else if (action === 'mute' && this.state() !== 'loading' && this.state() !== 'entry') {
       this.#runtime.audio.setMuted(!this.#runtime.audio.getSnapshot().muted);
     } else if (action === 'reset' && this.#machine.snapshot().state === 'complete') {
-      this.#machine.dispatch({ type: 'RESET' }, nowMs);
-      this.#runtime.audio.reset();
-      this.#hintVisible = false;
+      this.resetExperience();
     } else if (action === 'reload' || action === 'reenter') {
       window.location.reload();
     }
@@ -138,11 +212,19 @@ export class ExperienceController {
     this.#previousTime = nowMs;
     const signals = this.#signals(nowMs, deltaSeconds);
 
-    this.#runtime.stage.update(signals, this.#quality);
-    this.#runtime.audio.update(signals);
-    this.#runtime.postProcessing.update(signals);
-    this.#updateDiagnostics(signals);
-    this.#runtime.postProcessing.render();
+    try {
+      this.#runtime.stage.update(signals, this.#quality);
+      this.#runtime.audio.update(signals);
+      this.#runtime.postProcessing.update(signals);
+      this.#updateDiagnostics(signals);
+      this.#runtime.postProcessing.render();
+    } catch (error) {
+      this.#active = false;
+      this.#graphicsHealthy = false;
+      this.#qualityController.clearSampling();
+      this.#onRenderFailure?.(error);
+      return;
+    }
     this.#onFrameRendered?.(signals);
     this.#observeQuality(nowMs, signals.state);
     this.#renderUI(nowMs, signals.state);
@@ -209,6 +291,7 @@ export class ExperienceController {
     this.#canvas.dataset.cat = JSON.stringify(stage.moonCat?.getDiagnostics() ?? {});
     this.#canvas.dataset.postprocessing = JSON.stringify(this.#runtime.postProcessing.getSnapshot());
     this.#canvas.dataset.audio = JSON.stringify(this.#runtime.audio.getSnapshot());
+    this.#canvas.dataset.cameraDistance = this.#runtime.stage.cameraRig.distanceToTarget().toFixed(6);
     this.#canvas.dataset.renderReady = 'true';
     document.body.dataset.stageReady = 'true';
     document.body.dataset.characterReady = 'true';
@@ -227,7 +310,7 @@ export class ExperienceController {
     this.#qualityController.observeFrame(nowMs, {
       visible: document.visibilityState === 'visible',
       focused: document.hasFocus(),
-      graphicsHealthy: true,
+      graphicsHealthy: this.#graphicsHealthy,
       state,
     });
     const applied = this.#qualityController.applyPendingIfSafe(state);
@@ -250,6 +333,24 @@ export class ExperienceController {
       state,
       activeObjects: stats.activeCount,
       allocatedObjects: stats.allocatedObjects,
+    });
+  }
+
+  readonly #clearQualitySampling = (): void => {
+    this.#qualityController.clearSampling();
+  };
+
+  #clearSpellResidue(): void {
+    this.#runtime.stage.reset();
+    this.#runtime.audio.reset();
+    this.#runtime.postProcessing.clearHistory();
+  }
+
+  #createPointerInput(canvas: HTMLCanvasElement): PointerInput {
+    return new PointerInput(canvas, this.#uiRoot, {
+      getState: () => this.state(),
+      dispatch: this.#dispatchInput,
+      onPointerMove: (position) => { this.#pointerNdc = position; },
     });
   }
 }

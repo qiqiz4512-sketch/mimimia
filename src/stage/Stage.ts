@@ -70,6 +70,15 @@ export class Stage {
     this.cameraRig.resize(width, height);
   }
 
+  reset(): void {
+    this.magicalGirl?.reset();
+    this.summonDirector?.reset();
+    this.moonCat?.reset();
+    this.magicCircle.reset();
+    this.particleSystem.reset();
+    this.cameraRig.reset();
+  }
+
   dispose(): void {
     this.magicalGirl?.dispose();
     this.moonCat?.dispose();

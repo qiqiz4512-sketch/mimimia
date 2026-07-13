@@ -43,13 +43,16 @@ export class LoadingView {
     this.element.append(orbit, copy);
   }
 
-  render(progress: number, calibrating: boolean): void {
+  render(progress: number, calibrating: boolean, recovering = false): void {
     const amount = clamp01(progress);
     const percent = Math.round(amount * 100);
     this.element.style.setProperty('--load-progress', amount.toFixed(4));
     this.#percent.textContent = `${percent}%`;
     this.#meterFill.style.width = `${percent}%`;
-    this.#status.textContent = calibrating ? '正在校准月光' : '正在收拢星尘';
-    this.element.setAttribute('aria-label', calibrating ? '资源加载完成，正在校准月光' : `正在加载，${percent}%`);
+    this.#status.textContent = recovering ? '正在重连月光' : calibrating ? '正在校准月光' : '正在收拢星尘';
+    this.element.setAttribute(
+      'aria-label',
+      recovering ? '正在重建图形环境' : calibrating ? '资源加载完成，正在校准月光' : `正在加载，${percent}%`,
+    );
   }
 }

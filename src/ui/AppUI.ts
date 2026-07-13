@@ -93,12 +93,18 @@ export class AppUI {
     this.#root.hidden = model.debugHidden === true && !isError;
     this.#root.dataset.state = model.state;
     this.#loading.element.hidden = isError || (!isLoading && !isEntry);
-    this.#loading.render(model.progress, model.calibrating === true);
+    this.#loading.render(model.progress, model.calibrating === true, model.recovering === true);
     this.#loading.element.classList.toggle('is-entry', isEntry);
 
     this.#entryButton.hidden = !isLoading && !isEntry;
     this.#entryButton.disabled = !isEntry || model.readyToEnter !== true;
-    this.#entryButton.textContent = isEntry ? '进入月光虚境' : model.calibrating ? '月光校准中' : '月光尚未汇聚';
+    this.#entryButton.textContent = isEntry
+      ? '进入月光虚境'
+      : model.recovering
+        ? '月光重连中'
+        : model.calibrating
+          ? '月光校准中'
+          : '月光尚未汇聚';
 
     this.#qualityBadge.textContent = `当前 · ${QUALITY_LABELS[model.quality]}`;
     this.#qualityBadge.hidden = !isEntry;

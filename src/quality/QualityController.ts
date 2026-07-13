@@ -96,6 +96,10 @@ export class QualityController {
     this.#pendingDowngrade = true;
   }
 
+  clearSampling(): void {
+    this.#resetObservation();
+  }
+
   applyPendingIfSafe(state: ExperienceState): QualityTier | null {
     if (
       this.#forcedMode

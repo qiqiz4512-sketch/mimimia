@@ -6,7 +6,7 @@ export default defineConfig({
   fullyParallel: false,
   // GPU-heavy browser scenes become timing-invalid when too many software
   // graphics contexts compete on the same validation machine.
-  workers: 2,
+  workers: 1,
   retries: 0,
   reporter: 'list',
   use: {

@@ -94,4 +94,16 @@ describe('QualityController runtime monitoring', () => {
     expect(forced.applyPendingIfSafe('idle')).toBeNull();
     expect(forced.getSnapshot()).toMatchObject({ tier: 'high', forcedMode: true, pendingDowngrade: false });
   });
+
+  it('immediately clears a partial window when focus or graphics health changes', () => {
+    const controller = new QualityController({ benchmark: { run: async () => 60 }, initialTier: 'high' });
+    controller.observeFrame(0, context());
+    feedWindow(controller, 10_000, 26);
+    expect(controller.getSnapshot().lowWindowCount).toBe(1);
+    controller.clearSampling();
+    expect(controller.getSnapshot()).toMatchObject({ lowWindowCount: 0, pendingDowngrade: false });
+    controller.observeFrame(40_000, context());
+    feedWindow(controller, 50_000, 26);
+    expect(controller.getSnapshot().lowWindowCount).toBe(1);
+  });
 });

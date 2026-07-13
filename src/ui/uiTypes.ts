@@ -17,6 +17,7 @@ export interface UIRenderState {
   error: UIErrorState | null;
   readyToEnter?: boolean;
   calibrating?: boolean;
+  recovering?: boolean;
   hintVisible?: boolean;
   qualityNotice?: boolean;
   debugHidden?: boolean;

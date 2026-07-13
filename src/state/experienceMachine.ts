@@ -24,6 +24,11 @@ export class ExperienceMachine {
     this.#advanceCharge(nowMs);
     const state = this.#snapshot.state;
 
+    if (event.type === 'RECOVER') {
+      this.#transition('idle', nowMs, 0, null);
+      return this.snapshot();
+    }
+
     switch (event.type) {
       case 'ASSETS_READY':
         if (state === 'loading') this.#transition('entry', nowMs, 0, null);

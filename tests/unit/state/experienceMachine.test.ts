@@ -82,4 +82,18 @@ describe('ExperienceMachine', () => {
     machine.dispatch({ type: 'POINTER_UP' }, 5);
     expect(machine.snapshot().state).toBe('idle');
   });
+
+  it('returns any interrupted runtime state to a clean idle snapshot after graphics recovery', () => {
+    const machine = readyMachine();
+    machine.dispatch({ type: 'POINTER_DOWN' }, 10);
+    machine.tick(1_210);
+    expect(machine.snapshot()).toMatchObject({ state: 'charging', charge: 0.48 });
+    machine.dispatch({ type: 'RECOVER' }, 2_000);
+    expect(machine.snapshot()).toMatchObject({
+      state: 'idle',
+      charge: 0,
+      stateStartedAt: 2_000,
+      chargeStartedAt: null,
+    });
+  });
 });

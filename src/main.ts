@@ -2,6 +2,7 @@ import './styles.css';
 
 import { ASSET_MANIFEST } from './assets/assetManifest';
 import { AssetLoader } from './assets/AssetLoader';
+import type { AssetManifestEntry } from './assets/assetTypes';
 import { createExperience, type ExperienceRuntime } from './app/createExperience';
 import { ExperienceController, type DebugFrameState } from './app/ExperienceController';
 import { ReadinessGate } from './app/readinessGate';
@@ -9,6 +10,7 @@ import { DebugPanel } from './dev/DebugPanel';
 import { BenchmarkScene } from './quality/BenchmarkScene';
 import { QualityController } from './quality/QualityController';
 import { isQualityTier, type QualityTier } from './quality/qualityProfiles';
+import { GraphicsRecovery, type GraphicsRendererPort } from './recovery/GraphicsRecovery';
 import type { ExperienceState } from './state/experienceTypes';
 import { AppUI } from './ui/AppUI';
 
@@ -19,7 +21,7 @@ const sceneHost = document.createElement('div');
 sceneHost.id = 'scene-canvas-host';
 sceneHost.setAttribute('aria-hidden', 'true');
 
-const canvas = document.createElement('canvas');
+let canvas = document.createElement('canvas');
 canvas.dataset.renderSurface = '';
 sceneHost.append(canvas);
 
@@ -33,22 +35,59 @@ document.body.append(app);
 const ui = new AppUI(uiRoot);
 const query = __MIMIMIA_ALLOW_DEBUG_QUERY__ ? new URLSearchParams(window.location.search) : new URLSearchParams();
 const debugMode = query.get('debug') === '1';
+const fault = query.get('fault');
+const assetFault = fault === 'music' || fault === 'decorative' || fault === 'girl' || fault === 'cat';
 const requestedQuality = query.get('quality');
 const forcedQuality: QualityTier | null = isQualityTier(requestedQuality) ? requestedQuality : null;
 let quality: QualityTier = forcedQuality ?? 'high';
 const forceWebGL = query.get('backend') === 'webgl2';
 const holdBenchmarkGate = !debugMode && query.get('testGate') === 'benchmark';
 const gate = new ReadinessGate();
-const loader = new AssetLoader(ASSET_MANIFEST);
+const faultAttempts = new Map<string, number>();
+const loadManifest: readonly AssetManifestEntry[] = fault === 'decorative'
+  ? [...ASSET_MANIFEST, {
+    id: 'optional-debug-moon-glint',
+    url: '/assets/optional/debug-moon-glint.json',
+    kind: 'decoration',
+    critical: false,
+    bytes: 64,
+    retryCount: 0,
+  }]
+  : ASSET_MANIFEST;
+const faultFetcher: typeof fetch = async (input, init) => {
+  const url = typeof input === 'string' ? input : input instanceof URL ? input.href : input.url;
+  const matches = (fault === 'music' && url.includes('ambient-moon-void'))
+    || (fault === 'decorative' && url.includes('debug-moon-glint'))
+    || (fault === 'girl' && url.includes('/magical-girl/rig.json'))
+    || (fault === 'cat' && url.includes('/moon-cat/rig.json'));
+  if (matches) {
+    faultAttempts.set(fault, (faultAttempts.get(fault) ?? 0) + 1);
+    return new Response(null, { status: 503 });
+  }
+  return globalThis.fetch(input, init);
+};
+const loader = new AssetLoader(loadManifest, assetFault ? { fetcher: faultFetcher } : undefined);
 let loadProgress = 0;
 let runtime: ExperienceRuntime | null = null;
 let controller: ExperienceController | null = null;
 let qualityController: QualityController | null = null;
 let benchmarkScene: BenchmarkScene | null = null;
+let graphicsRecovery: GraphicsRecovery | null = null;
+let assetCache: ReadonlyMap<string, Uint8Array> = new Map();
+let rendererGeneration = 0;
 const debugPanel = debugMode ? new DebugPanel() : null;
 let benchmarkReleaseRequested = !holdBenchmarkGate;
 let benchmarkCompleted = false;
 let disposed = false;
+
+class CriticalAssetError extends Error {
+  readonly failed: readonly string[];
+
+  constructor(failed: readonly string[]) {
+    super(`Critical assets failed: ${failed.join(', ')}`);
+    this.failed = failed;
+  }
+}
 
 const renderLoading = () => {
   document.body.dataset.loadProgress = loadProgress >= 1 ? '1' : loadProgress.toFixed(4);
@@ -117,11 +156,89 @@ function startController(debug?: DebugFrameState): void {
     qualityController,
     debugPanel: debugPanel ?? undefined,
     debugFrame: debug,
+    onRenderFailure: (error) => {
+      if (graphicsRecovery) void graphicsRecovery.rebuild({
+        api: 'RenderLoop',
+        message: error instanceof Error ? error.message : String(error),
+        reason: null,
+        originalEvent: error,
+      });
+      else renderError('图形环境暂时不可用', '画面渲染中断，请重新加载。');
+    },
   });
   document.body.dataset.renderBackend = runtime.renderer.backend;
   document.body.dataset.characterPose = query.get('characterPose') ?? 'idle';
   canvas.hidden = false;
   controller.start();
+  setupGraphicsRecovery();
+}
+
+function setupGraphicsRecovery(): void {
+  if (!runtime || !controller || graphicsRecovery) return;
+  rendererGeneration += 1;
+  document.body.dataset.rendererGeneration = String(rendererGeneration);
+  document.body.dataset.graphicsRecovery = 'healthy';
+  graphicsRecovery = new GraphicsRecovery({
+    canvas: () => canvas,
+    getRenderer: () => runtime?.renderer.renderer as unknown as GraphicsRendererPort ?? null,
+    rebuildRuntime: async () => {
+      controller?.beginGraphicsRecovery();
+      document.body.dataset.graphicsRecoveryStep = 'disposing';
+      runtime?.dispose();
+      document.body.dataset.graphicsRecoveryStep = 'disposed';
+      runtime = null;
+      if (fault === 'graphics-rebuild') {
+        document.body.dataset.graphicsRecoveryStep = 'injected-failure';
+        throw new Error('Injected graphics rebuild failure');
+      }
+      const tier = qualityController?.getSnapshot().tier ?? quality;
+      const replacementCanvas = document.createElement('canvas');
+      replacementCanvas.dataset.renderSurface = '';
+      document.body.dataset.graphicsRecoveryStep = 'creating';
+      const rebuilt = await createExperience({
+        canvas: replacementCanvas,
+        assets: assetCache,
+        quality: tier,
+        forceWebGL,
+      });
+      canvas.replaceWith(replacementCanvas);
+      canvas = replacementCanvas;
+      runtime = rebuilt;
+      rendererGeneration += 1;
+      document.body.dataset.rendererGeneration = String(rendererGeneration);
+      document.body.dataset.renderBackend = rebuilt.renderer.backend;
+      controller?.completeGraphicsRecovery(rebuilt, replacementCanvas);
+      document.body.dataset.graphicsRecoveryStep = 'complete';
+    },
+    onLoss: () => controller?.beginGraphicsRecovery(),
+    onStateChange: (snapshot) => {
+      document.body.dataset.graphicsRecovery = snapshot.status;
+      document.body.dataset.graphicsRebuildCount = String(snapshot.rebuildCount);
+      document.body.dataset.graphicsRecoveryError = snapshot.lastError ?? '';
+    },
+    onFailure: () => controller?.failGraphicsRecovery(),
+  });
+  graphicsRecovery.watch();
+
+  if (query.get('recoveryTest') === '1') {
+    (window as typeof window & {
+      __mimimiaGraphicsTest?: {
+        loseDevice: () => void;
+        snapshot: () => ReturnType<GraphicsRecovery['getSnapshot']>;
+      };
+    }).__mimimiaGraphicsTest = {
+      loseDevice: () => runtime?.renderer.renderer.onDeviceLost({
+        api: 'WebGPU',
+        message: 'Injected device loss',
+        reason: 'unknown',
+        originalEvent: null,
+      }),
+      snapshot: () => {
+        if (!graphicsRecovery) throw new Error('Graphics recovery unavailable');
+        return graphicsRecovery.getSnapshot();
+      },
+    };
+  }
 }
 
 function releaseBenchmarkGate(): void {
@@ -137,9 +254,9 @@ if (holdBenchmarkGate) {
 
 async function initialize(): Promise<void> {
   try {
-    if (query.get('fault') === 'renderer-init') throw new Error('Injected renderer initialization failure');
+    if (fault === 'renderer-init') throw new Error('Injected renderer initialization failure');
 
-    if (debugMode) {
+    if (debugMode && !assetFault) {
       loadProgress = 1;
       document.body.dataset.loadProgress = '1';
       const characterPose = query.get('characterPose');
@@ -151,6 +268,7 @@ async function initialize(): Promise<void> {
         characterPose: characterPose === 'min' || characterPose === 'max' ? characterPose : 'idle',
         showCat: query.get('showCat') === '1',
       });
+      assetCache = new Map();
       qualityController = new QualityController({
         benchmark: { run: async () => 60 },
         initialTier: quality,
@@ -166,10 +284,15 @@ async function initialize(): Promise<void> {
       loadProgress = progress;
       renderLoading();
     });
+    document.body.dataset.assetMuted = String(loaded.muted);
+    document.body.dataset.assetSkipped = loaded.skipped.join(',');
+    document.body.dataset.assetFailed = loaded.failed.join(',');
+    document.body.dataset.faultAttempts = String(fault ? faultAttempts.get(fault) ?? 0 : 0);
     if (loaded.status === 'aborted') return;
     if (loaded.status === 'critical-failure') {
-      throw new Error(`Critical assets failed: ${loaded.failed.join(', ')}`);
+      throw new CriticalAssetError(loaded.failed);
     }
+    assetCache = loaded.assets;
     gate.mark('assetsReady');
     renderLoading();
 
@@ -229,7 +352,11 @@ async function initialize(): Promise<void> {
     console.error('Moonlight scene initialization failed', error);
     runtime?.dispose();
     runtime = null;
-    renderError('图形环境暂时不可用', '月光通路没有建立，请稍后重试。');
+    if (error instanceof CriticalAssetError) {
+      renderError('月光使者未能抵达', '已自动重试一次，角色资源仍未能载入。');
+    } else {
+      renderError('图形环境暂时不可用', '月光通路没有建立，请稍后重试。');
+    }
   }
 }
 
@@ -237,6 +364,7 @@ window.addEventListener('pagehide', () => {
   disposed = true;
   loader.cancel();
   benchmarkScene?.cancel();
+  graphicsRecovery?.dispose();
   if (controller) controller.dispose();
   else runtime?.dispose();
   debugPanel?.dispose();

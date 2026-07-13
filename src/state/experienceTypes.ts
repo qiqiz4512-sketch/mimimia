@@ -18,7 +18,8 @@ export type ExperienceEvent =
   | { type: 'DISSOLVE_DONE' }
   | { type: 'SUMMON_DONE' }
   | { type: 'RESET' }
-  | { type: 'RESET_DONE' };
+  | { type: 'RESET_DONE' }
+  | { type: 'RECOVER' };
 
 export interface ExperienceSnapshot {
   state: ExperienceState;
