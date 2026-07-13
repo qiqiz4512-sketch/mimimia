@@ -1,0 +1,49 @@
+:root {
+  color: #f4efff;
+  background: #09061a;
+  font-family: ui-rounded, "SF Pro Rounded", "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  min-width: 320px;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+body {
+  background:
+    radial-gradient(circle at 50% 40%, rgb(67 48 112 / 45%), transparent 42%),
+    linear-gradient(160deg, #110a2a, #050410 72%);
+}
+
+#app,
+#scene-canvas-host,
+#ui-root {
+  position: absolute;
+  inset: 0;
+}
+
+#scene-canvas-host {
+  pointer-events: none;
+}
+
+#ui-root {
+  display: grid;
+  place-items: center;
+}
+
+.preparation-status {
+  margin: 0;
+  color: rgb(235 226 255 / 78%);
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  letter-spacing: 0.16em;
+}
