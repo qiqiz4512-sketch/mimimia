@@ -1,0 +1,42 @@
+import type { AssetManifestEntry } from './assetTypes';
+
+export const BUNDLED_CRITICAL_MODULES = [
+  'procedural-magic-circle',
+  'first-cast-materials',
+] as const;
+
+export const ASSET_MANIFEST = [
+  { id: 'girl-rig', url: '/assets/characters/magical-girl/rig.json', kind: 'character', critical: true, bytes: 4651, retryCount: 1 },
+  { id: 'girl-back-hair', url: '/assets/characters/magical-girl/back-hair.webp', kind: 'character', critical: true, bytes: 354970, retryCount: 1 },
+  { id: 'girl-body-legs', url: '/assets/characters/magical-girl/body-legs.webp', kind: 'character', critical: true, bytes: 1410860, retryCount: 1 },
+  { id: 'girl-cape-lining', url: '/assets/characters/magical-girl/cape-lining.webp', kind: 'character', critical: true, bytes: 29180, retryCount: 1 },
+  { id: 'girl-cape-outer', url: '/assets/characters/magical-girl/cape-outer.webp', kind: 'character', critical: true, bytes: 117834, retryCount: 1 },
+  { id: 'girl-eyes-closed', url: '/assets/characters/magical-girl/eyes-closed.webp', kind: 'character', critical: true, bytes: 6128, retryCount: 1 },
+  { id: 'girl-eyes-open', url: '/assets/characters/magical-girl/eyes-open.webp', kind: 'character', critical: true, bytes: 47500, retryCount: 1 },
+  { id: 'girl-face', url: '/assets/characters/magical-girl/face.webp', kind: 'character', critical: true, bytes: 185660, retryCount: 1 },
+  { id: 'girl-front-hair', url: '/assets/characters/magical-girl/front-hair.webp', kind: 'character', critical: true, bytes: 160374, retryCount: 1 },
+  { id: 'girl-hat-body', url: '/assets/characters/magical-girl/hat-body.webp', kind: 'character', critical: true, bytes: 110222, retryCount: 1 },
+  { id: 'girl-hat-ornament', url: '/assets/characters/magical-girl/hat-ornament.webp', kind: 'character', critical: true, bytes: 137198, retryCount: 1 },
+  { id: 'girl-ribbon-left', url: '/assets/characters/magical-girl/ribbon-left.webp', kind: 'character', critical: true, bytes: 176590, retryCount: 1 },
+  { id: 'girl-ribbon-right', url: '/assets/characters/magical-girl/ribbon-right.webp', kind: 'character', critical: true, bytes: 218750, retryCount: 1 },
+  { id: 'girl-skirt', url: '/assets/characters/magical-girl/skirt.webp', kind: 'character', critical: true, bytes: 713748, retryCount: 1 },
+  { id: 'girl-staff-glow', url: '/assets/characters/magical-girl/staff-glow.webp', kind: 'character', critical: true, bytes: 100582, retryCount: 1 },
+  { id: 'girl-staff', url: '/assets/characters/magical-girl/staff.webp', kind: 'character', critical: true, bytes: 463106, retryCount: 1 },
+  { id: 'cat-rig', url: '/assets/characters/moon-cat/rig.json', kind: 'character', critical: true, bytes: 2763, retryCount: 1 },
+  { id: 'cat-body', url: '/assets/characters/moon-cat/body.webp', kind: 'character', critical: true, bytes: 456712, retryCount: 1 },
+  { id: 'cat-ear-left', url: '/assets/characters/moon-cat/ear-left.webp', kind: 'character', critical: true, bytes: 94416, retryCount: 1 },
+  { id: 'cat-ear-right', url: '/assets/characters/moon-cat/ear-right.webp', kind: 'character', critical: true, bytes: 86096, retryCount: 1 },
+  { id: 'cat-eyes-closed', url: '/assets/characters/moon-cat/eyes-closed.webp', kind: 'character', critical: true, bytes: 10372, retryCount: 1 },
+  { id: 'cat-eyes-open', url: '/assets/characters/moon-cat/eyes-open.webp', kind: 'character', critical: true, bytes: 83484, retryCount: 1 },
+  { id: 'cat-glow', url: '/assets/characters/moon-cat/glow.webp', kind: 'character', critical: true, bytes: 30328, retryCount: 1 },
+  { id: 'cat-head', url: '/assets/characters/moon-cat/head.webp', kind: 'character', critical: true, bytes: 266226, retryCount: 1 },
+  { id: 'cat-tail', url: '/assets/characters/moon-cat/tail.webp', kind: 'character', critical: true, bytes: 191510, retryCount: 1 },
+  { id: 'ambient-moon-void', url: '/assets/audio/ambient-moon-void.mp3', kind: 'music', critical: true, bytes: 256941, retryCount: 0 },
+  { id: 'charge-low', url: '/assets/audio/charge-low.mp3', kind: 'sound', critical: true, bytes: 51405, retryCount: 0 },
+  { id: 'charge-crystals', url: '/assets/audio/charge-crystals.mp3', kind: 'sound', critical: true, bytes: 51405, retryCount: 0 },
+  { id: 'charge-rise', url: '/assets/audio/charge-rise.mp3', kind: 'sound', critical: true, bytes: 51405, retryCount: 0 },
+  { id: 'charged-cue', url: '/assets/audio/charged-cue.mp3', kind: 'sound', critical: true, bytes: 19245, retryCount: 0 },
+  { id: 'dissolve', url: '/assets/audio/dissolve.mp3', kind: 'sound', critical: true, bytes: 21165, retryCount: 0 },
+  { id: 'release-chime', url: '/assets/audio/release-chime.mp3', kind: 'sound', critical: true, bytes: 29325, retryCount: 0 },
+  { id: 'cat-form', url: '/assets/audio/cat-form.mp3', kind: 'sound', critical: true, bytes: 35085, retryCount: 0 },
+] as const satisfies readonly AssetManifestEntry[];

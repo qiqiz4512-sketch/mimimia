@@ -12,6 +12,8 @@
     "test:all": "npm run test:unit -- --run && npm run test:e2e",
     "assets:private-check": "node scripts/assets/verify-private-boundary.mjs",
     "assets:ledger-check": "node scripts/assets/verify-ledger.mjs",
+    "assets:export": "node scripts/assets/export-runtime-art.mjs",
+    "assets:size-check": "npm run build && node scripts/assets/measure-brotli-size.mjs",
     "art:validate-layers": "node scripts/art/validate-layer-pack.mjs",
     "art:render-extremes": "node scripts/art/render-layer-extremes.mjs",
     "audio:generate": "node scripts/audio/generate-original-audio.mjs",

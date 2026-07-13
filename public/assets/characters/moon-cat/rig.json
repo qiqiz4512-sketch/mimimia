@@ -1,0 +1,141 @@
+{
+  "id": "moon-cat",
+  "version": 1,
+  "canvas": {
+    "width": 1536,
+    "height": 1536
+  },
+  "origin": {
+    "x": 0.52,
+    "y": 0.84
+  },
+  "groupMotion": {
+    "translateYPercent": 2.5
+  },
+  "worldHeight": 1.34,
+  "sourceMaster": "approved-master.png",
+  "sourceMasterSha256": "6f5b3bbe9fc01a816897ee41741b9761710adaf38f9dab617f16d25e0ca15fbe",
+  "layers": [
+    {
+      "name": "glow",
+      "path": "glow.webp",
+      "pivot": {
+        "x": 0.55,
+        "y": 0.55
+      },
+      "zOrder": 100,
+      "blendMode": "additive",
+      "motionRange": {
+        "rotationDegrees": 0,
+        "translateYPercent": 2.5
+      }
+    },
+    {
+      "name": "tail",
+      "path": "tail.webp",
+      "pivot": {
+        "x": 0.68,
+        "y": 0.61
+      },
+      "zOrder": 200,
+      "blendMode": "normal",
+      "motionRange": {
+        "rotationDegrees": 8,
+        "translateYPercent": 2.5
+      }
+    },
+    {
+      "name": "body",
+      "path": "body.webp",
+      "pivot": {
+        "x": 0.52,
+        "y": 0.62
+      },
+      "zOrder": 300,
+      "blendMode": "normal",
+      "motionRange": {
+        "rotationDegrees": 0,
+        "translateYPercent": 2.5
+      }
+    },
+    {
+      "name": "ear-left",
+      "path": "ear-left.webp",
+      "pivot": {
+        "x": 0.34,
+        "y": 0.34
+      },
+      "zOrder": 390,
+      "blendMode": "normal",
+      "motionRange": {
+        "rotationDegrees": 6,
+        "translateYPercent": 2.5
+      }
+    },
+    {
+      "name": "ear-right",
+      "path": "ear-right.webp",
+      "pivot": {
+        "x": 0.51,
+        "y": 0.35
+      },
+      "zOrder": 391,
+      "blendMode": "normal",
+      "motionRange": {
+        "rotationDegrees": 6,
+        "translateYPercent": 2.5
+      }
+    },
+    {
+      "name": "head",
+      "path": "head.webp",
+      "pivot": {
+        "x": 0.43,
+        "y": 0.48
+      },
+      "zOrder": 400,
+      "blendMode": "normal",
+      "motionRange": {
+        "rotationDegrees": 3,
+        "translateYPercent": 2.5
+      }
+    },
+    {
+      "name": "eyes-open",
+      "path": "eyes-open.webp",
+      "pivot": {
+        "x": 0.43,
+        "y": 0.43
+      },
+      "zOrder": 410,
+      "blendMode": "normal",
+      "motionRange": {
+        "rotationDegrees": 0,
+        "translateYPercent": 2.5
+      },
+      "parent": "head",
+      "defaultVisible": true
+    },
+    {
+      "name": "eyes-closed",
+      "path": "eyes-closed.webp",
+      "pivot": {
+        "x": 0.43,
+        "y": 0.43
+      },
+      "zOrder": 411,
+      "blendMode": "normal",
+      "motionRange": {
+        "rotationDegrees": 0,
+        "translateYPercent": 2.5
+      },
+      "parent": "head",
+      "defaultVisible": false
+    }
+  ],
+  "sourceCanvas": {
+    "width": 2048,
+    "height": 2048
+  },
+  "runtimeScale": 0.75
+}
