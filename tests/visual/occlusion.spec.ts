@@ -117,7 +117,10 @@ test('keeps landmarks and timing aligned within two CSS pixels across quality ti
 });
 
 test('keeps newly added highlights below eight percent of the face and chest regions', async ({ page }) => {
-  test.setTimeout(180_000);
+  // This matrix performs 24 fresh GPU-backed captures. Hosted software
+  // rendering can take more than three minutes even when every frame is
+  // healthy, so keep the timeout above the measured worst-case runtime.
+  test.setTimeout(420_000);
   for (const viewport of viewports) {
     for (const quality of qualities) {
       for (const state of ['charged', 'summoning'] as const) {
