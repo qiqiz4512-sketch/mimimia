@@ -6,7 +6,7 @@
 
 首次设置仓库时，在 GitHub 的 Pages 设置中选择“GitHub Actions”作为来源。计划网址为：
 
-`https://lileee.github.io/mimimia/`
+`https://qiqiz4512-sketch.github.io/mimimia/`
 
 ## 持续检查
 
