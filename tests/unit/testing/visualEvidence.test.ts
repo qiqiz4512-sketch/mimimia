@@ -28,10 +28,9 @@ describe('visual evidence helpers', () => {
   });
 
   it('decodes a PNG canvas data URL', () => {
-    const source = Buffer.from([1, 2, 3, 4]);
-    const dataUrl = `data:image/png;base64,${source.toString('base64')}`;
+    const dataUrl = 'data:image/png;base64,AQIDBA==';
 
-    expect(bufferFromPngDataUrl(dataUrl)).toEqual(source);
+    expect([...bufferFromPngDataUrl(dataUrl)]).toEqual([1, 2, 3, 4]);
     expect(() => bufferFromPngDataUrl('data:text/plain;base64,SGVsbG8=')).toThrow(/PNG/);
   });
 
