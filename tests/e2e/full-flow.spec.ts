@@ -44,13 +44,32 @@ const canvasJson = async <T>(page: import('@playwright/test').Page, attribute: s
 test('keeps the entire mouse, failure, summon, cat, sound, and reset flow coherent', async ({ browser, page }, testInfo) => {
   const automaticQuality = testInfo.project.name === 'chrome-stable' || testInfo.project.name === 'edge-stable';
   const slowRunner = automaticQuality || process.env.CI === 'true';
+  const pageErrors: string[] = [];
+  page.on('pageerror', (error) => pageErrors.push(error.stack ?? error.message));
   test.setTimeout(slowRunner ? 300_000 : 120_000);
   const params = new URLSearchParams(automaticQuality ? {} : { quality: 'compatibility' });
   if (testInfo.project.name === 'chromium-webgl2') params.set('backend', 'webgl2');
   await page.goto(`/?${params}`);
   await installStateHistory(page);
   const enterButton = page.getByTestId('enter-button');
-  await expect(enterButton).toBeEnabled({ timeout: slowRunner ? 180_000 : 60_000 });
+  try {
+    await expect(enterButton).toBeEnabled({ timeout: slowRunner ? 180_000 : 60_000 });
+  } catch (error) {
+    const diagnostics = await page.evaluate(() => {
+      const probe = document.createElement('canvas');
+      const gl = probe.getContext('webgl2');
+      return {
+        bodyDataset: { ...document.body.dataset },
+        bodyText: document.body.innerText,
+        webgl2Available: Boolean(gl),
+        contextAttributes: gl?.getContextAttributes() ?? null,
+        webgpuAvailable: 'gpu' in navigator,
+        userAgent: navigator.userAgent,
+      };
+    });
+    console.error(`ENTRY_DIAGNOSTICS ${JSON.stringify({ ...diagnostics, pageErrors })}`);
+    throw error;
+  }
   // Native keyboard activation avoids a WebKit pointer-injection flake on the
   // transitioning entry overlay while still exercising the button click path.
   await enterButton.press('Enter');
