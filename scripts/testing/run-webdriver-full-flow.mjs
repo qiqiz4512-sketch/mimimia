@@ -3,7 +3,11 @@ import { arch, platform, release, totalmem } from 'node:os';
 import { dirname, resolve } from 'node:path';
 
 import { argument, ensureServer, LOCAL_URL, writeJson } from '../performance/browser-runtime.mjs';
-import { bufferFromPngDataUrl, inspectSceneScreenshot } from './visual-evidence.mjs';
+import {
+  bufferFromPngDataUrl,
+  inspectSceneScreenshot,
+  visualEvidencePasses,
+} from './visual-evidence.mjs';
 
 const webdriverUrl = argument('webdriver', 'http://127.0.0.1:4444');
 const baseUrl = argument('url', LOCAL_URL);
@@ -231,7 +235,7 @@ try {
   const output = await writeJson(outputPath, report);
   console.log(`${report.browser.name} full-flow report written to ${output}`);
   console.log(JSON.stringify({ browser: report.browser, checks: report.checks, runtime, reset }, null, 2));
-  if (visualEvidence && !visualEvidence.passed) {
+  if (visualEvidence && !visualEvidencePasses(visualEvidence, canvasVisualEvidence)) {
     throw new Error('Completed summon screenshot does not contain visible scene highlights');
   }
 } finally {

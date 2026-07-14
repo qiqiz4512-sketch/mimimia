@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest';
 import {
   bufferFromPngDataUrl,
   inspectSceneScreenshot,
+  visualEvidencePasses,
 } from '../../../scripts/testing/visual-evidence.mjs';
 
 describe('visual evidence helpers', () => {
@@ -32,5 +33,11 @@ describe('visual evidence helpers', () => {
 
     expect(bufferFromPngDataUrl(dataUrl)).toEqual(source);
     expect(() => bufferFromPngDataUrl('data:text/plain;base64,SGVsbG8=')).toThrow(/PNG/);
+  });
+
+  it('accepts direct canvas evidence when SafariDriver omits the accelerated layer', () => {
+    expect(visualEvidencePasses({ passed: false }, { passed: true })).toBe(true);
+    expect(visualEvidencePasses({ passed: true }, { passed: false })).toBe(true);
+    expect(visualEvidencePasses({ passed: false }, { passed: false })).toBe(false);
   });
 });

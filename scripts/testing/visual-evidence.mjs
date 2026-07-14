@@ -6,6 +6,10 @@ export function bufferFromPngDataUrl(dataUrl) {
   return Buffer.from(match[1], 'base64');
 }
 
+export function visualEvidencePasses(pageEvidence, canvasEvidence) {
+  return pageEvidence?.passed === true || canvasEvidence?.passed === true;
+}
+
 export async function inspectSceneScreenshot(imageBuffer, options = {}) {
   const metadata = await sharp(imageBuffer).metadata();
   if (!metadata.width || !metadata.height) throw new Error('Screenshot has no measurable dimensions');
