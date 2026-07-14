@@ -51,7 +51,7 @@ export class Stage {
   update(signals: FrameSignals, quality: QualityTier): void {
     this.#backdrop.update(signals.nowMs, quality);
     this.magicalGirl?.update(signals);
-    this.magicCircle.update(signals);
+    this.magicCircle.update(signals, quality);
     this.particleSystem.update(signals, quality);
     if (!this.#options.showCat) this.summonDirector?.update(signals);
     this.moonCat?.setPointerNdc(signals.pointerNdc.x, signals.pointerNdc.y);
