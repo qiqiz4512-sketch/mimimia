@@ -16,6 +16,8 @@ export interface ParticleLayoutPoint {
   size: number;
 }
 
+export type SpellParticleKind = 'dust' | 'riser' | 'flare';
+
 export function createParticleLayout(count: number, seed: number): ParticleLayoutPoint[] {
   const random = createSeededRandom(seed);
   return Array.from({ length: count }, (_, index) => {
@@ -52,4 +54,29 @@ export function createParticleLayout(count: number, seed: number): ParticleLayou
     }
     return { origin, target, seed: random(), size: 3.5 + random() * 5.2 };
   });
+}
+
+export function createSemanticParticleLayouts(
+  seed: number,
+  capacities: { dust: number; riser: number; flare: number },
+) {
+  return {
+    dust: createParticleLayout(capacities.dust, seed),
+    riser: createParticleLayout(capacities.riser, seed ^ 0x52495345).map((point) => ({
+      ...point,
+      target: [
+        Math.cos(point.seed * Math.PI * 2) * (0.35 + point.seed * 1.55),
+        0.08 + point.seed * 3.8,
+        Math.sin(point.seed * Math.PI * 2) * 0.42,
+      ] as const,
+    })),
+    flare: createParticleLayout(capacities.flare, seed ^ 0x464c4152).map((point, index) => ({
+      ...point,
+      target: [
+        Math.cos(index * Math.PI * 2 / capacities.flare) * 1.85,
+        0.22 + point.seed * 2.9,
+        Math.sin(index * Math.PI * 2 / capacities.flare) * 0.46,
+      ] as const,
+    })),
+  } as const;
 }

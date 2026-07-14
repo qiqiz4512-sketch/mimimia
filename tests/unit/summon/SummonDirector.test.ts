@@ -36,20 +36,15 @@ describe('summon timing', () => {
 });
 
 describe('SummonDirector', () => {
-  it('triggers each pooled burst once and leaves the cat complete', () => {
+  it('drives the cat reveal and path lifecycle without particle triggers', () => {
     const cat = { setReveal: vi.fn(), setAnchorPosition: vi.fn(), reset: vi.fn() };
-    const particles = { burst: vi.fn() };
-    const director = new SummonDirector(cat, particles);
+    const director = new SummonDirector(cat);
 
     for (const elapsed of [0, 120, 520, 760, 1_500, 1_660, 2_360, 2_600, 2_600]) {
       director.update(signalsAt(elapsed, elapsed >= 2_600 ? 'complete' : 'summoning'));
     }
-    expect(particles.burst.mock.calls).toEqual([
-      ['release-flash'],
-      ['fill-rise'],
-      ['cat-settle'],
-    ]);
     expect(cat.setReveal).toHaveBeenLastCalledWith(1, 1, 1);
+    expect(cat.setAnchorPosition).toHaveBeenLastCalledWith(1.28, 3.02, 0);
     expect(director.isComplete()).toBe(true);
   });
 });

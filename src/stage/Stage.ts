@@ -41,7 +41,7 @@ export class Stage {
     ]);
     this.magicalGirl = magicalGirl;
     this.moonCat = moonCat;
-    this.summonDirector = new SummonDirector(moonCat, this.particleSystem);
+    this.summonDirector = new SummonDirector(moonCat);
     magicalGirl.setDebugPose(this.#options.characterPose ?? 'idle');
     moonCat.setDebugPose(this.#options.characterPose ?? 'idle');
     if (this.#options.showCat) moonCat.setReveal(0, 1, 1);

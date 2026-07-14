@@ -1,10 +1,14 @@
 import { expect, test } from '@playwright/test';
 
 type ParticleStats = {
+  quality: 'high' | 'balanced' | 'compatibility';
   capacity: number;
   activeCount: number;
   allocatedObjects: number;
-  trailSegments: number;
+  dustCount: number;
+  risingLightCount: number;
+  starFlareCount: number;
+  drawCalls: number;
 };
 
 const readStats = (page: import('@playwright/test').Page) => page.locator('canvas[data-render-surface]').evaluate((canvas) =>
@@ -30,14 +34,21 @@ test('dissolves a 2499 ms early release gently back to the allocation baseline',
 
 test('preserves the full dissolve flow and fixed caps across all quality tiers', async ({ page }) => {
   test.setTimeout(75_000);
-  for (const [quality, expected, trails] of [
-    ['high', 900, 4],
-    ['balanced', 520, 2],
-    ['compatibility', 240, 0],
+  for (const [quality, dustCount, risingLightCount, starFlareCount] of [
+    ['high', 900, 90, 18],
+    ['balanced', 520, 54, 12],
+    ['compatibility', 240, 30, 6],
   ] as const) {
     await page.goto(`/?debug=1&quality=${quality}&experienceState=dissolving&charge=0.9996&dissolve=0`);
     await waitForParticles(page);
-    expect(await readStats(page)).toMatchObject({ activeCount: expected, trailSegments: trails });
+    expect(await readStats(page)).toMatchObject({
+      quality,
+      dustCount,
+      risingLightCount,
+      starFlareCount,
+      drawCalls: 3,
+      activeCount: dustCount + risingLightCount + starFlareCount,
+    });
   }
 });
 

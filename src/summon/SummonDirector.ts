@@ -1,6 +1,5 @@
 import type { FrameSignals } from '../app/frameSignals';
 import { EXPERIENCE_TIMING } from '../config/experience';
-import type { ParticleBurstKind } from '../effects/ParticleSystem';
 import { getSummonFrame, type SummonFrame } from './summonTiming';
 
 interface SummonCatTarget {
@@ -9,21 +8,14 @@ interface SummonCatTarget {
   reset: () => void;
 }
 
-interface SummonParticleTarget {
-  burst: (kind: ParticleBurstKind) => void;
-}
-
 export class SummonDirector {
   readonly #cat: SummonCatTarget;
-  readonly #particles: SummonParticleTarget;
-  readonly #triggered = new Set<ParticleBurstKind>();
   #complete = false;
   #active = false;
   #frame: SummonFrame = getSummonFrame(0);
 
-  constructor(cat: SummonCatTarget, particles: SummonParticleTarget) {
+  constructor(cat: SummonCatTarget) {
     this.#cat = cat;
-    this.#particles = particles;
   }
 
   update(signals: FrameSignals): void {
@@ -42,9 +34,6 @@ export class SummonDirector {
     this.#active = true;
     const elapsedMs = Math.min(1, Math.max(0, signals.summon)) * EXPERIENCE_TIMING.summonEndMs;
     this.#frame = getSummonFrame(elapsedMs);
-    this.#triggerAt(elapsedMs, EXPERIENCE_TIMING.releaseHoldMs, 'release-flash');
-    this.#triggerAt(elapsedMs, EXPERIENCE_TIMING.fillStartMs, 'fill-rise');
-    this.#triggerAt(elapsedMs, EXPERIENCE_TIMING.catMoveStartMs, 'cat-settle');
     this.#applyFrame();
     this.#complete = this.#frame.complete;
   }
@@ -58,17 +47,10 @@ export class SummonDirector {
   }
 
   reset(): void {
-    this.#triggered.clear();
     this.#complete = false;
     this.#active = false;
     this.#frame = getSummonFrame(0);
     this.#cat.reset();
-  }
-
-  #triggerAt(elapsedMs: number, threshold: number, kind: ParticleBurstKind): void {
-    if (elapsedMs < threshold || this.#triggered.has(kind)) return;
-    this.#triggered.add(kind);
-    this.#particles.burst(kind);
   }
 
   #applyFrame(): void {

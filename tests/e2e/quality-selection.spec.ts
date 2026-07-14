@@ -59,7 +59,9 @@ test('holds a pending downgrade during a spell and applies exactly one tier when
   await expect(page.locator('body')).toHaveAttribute('data-quality-pending', 'false');
   await expect(page.getByTestId('quality-notice')).toContainText('均衡画质');
   await expect(canvas).toHaveAttribute('data-postprocessing', /"quality":"balanced"/);
-  await expect(canvas).toHaveAttribute('data-particle-stats', /"trailSegments":2/);
+  const particleStats = await canvas.evaluate((element) =>
+    JSON.parse((element as HTMLCanvasElement).dataset.particleStats ?? '{}'));
+  expect(particleStats).toMatchObject({ quality: 'balanced', drawCalls: 3 });
 });
 
 test('keeps a forced debug tier stable and reports the real backend and runtime statistics', async ({ page }) => {

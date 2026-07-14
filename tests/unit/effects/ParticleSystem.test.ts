@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
 import { ParticleSystem } from '../../../src/effects/ParticleSystem';
-import { QUALITY_PROFILES, type QualityTier } from '../../../src/quality/qualityProfiles';
 
 const frame = (state: 'idle' | 'charged' | 'dissolving' | 'summoning', charge: number, dissolve = 0, nowMs = 0) => ({
   nowMs,
@@ -14,16 +13,26 @@ const frame = (state: 'idle' | 'charged' | 'dissolving' | 'summoning', charge: n
 });
 
 describe('ParticleSystem', () => {
-  it('uses deterministic positions and exact quality caps', () => {
+  it('uses deterministic semantic layouts and exact quality caps', () => {
     const first = new ParticleSystem(0x4d4f4f4e);
     const second = new ParticleSystem(0x4d4f4f4e);
     expect(first.getLayoutSample(8)).toEqual(second.getLayoutSample(8));
 
-    const expectedTrails: Record<QualityTier, number> = { high: 4, balanced: 2, compatibility: 0 };
-    for (const quality of ['high', 'balanced', 'compatibility'] as const) {
+    for (const [quality, dustCount, risingLightCount, starFlareCount] of [
+      ['high', 900, 90, 18],
+      ['balanced', 520, 54, 12],
+      ['compatibility', 240, 30, 6],
+    ] as const) {
       first.update(frame('charged', 1), quality);
-      expect(first.getStats().activeCount).toBe(QUALITY_PROFILES[quality].gatherStardust);
-      expect(first.getStats().trailSegments).toBe(expectedTrails[quality]);
+      expect(first.getStats()).toMatchObject({
+        quality,
+        dustCount,
+        risingLightCount,
+        starFlareCount,
+        drawCalls: 3,
+        activeCount: dustCount + risingLightCount + starFlareCount,
+      });
+      expect(first.group.children.every((child) => child.visible)).toBe(true);
     }
     first.dispose();
     second.dispose();
@@ -42,18 +51,32 @@ describe('ParticleSystem', () => {
     particles.dispose();
   });
 
-  it('preallocates all three successful summon burst modes for every tier', () => {
+  it('reconstructs every summon particle phase from summon progress in one fixed frame', () => {
     const particles = new ParticleSystem(99);
-    for (const quality of ['high', 'balanced', 'compatibility'] as const) {
-      particles.update(frame('idle', 0), quality);
-      for (const mode of ['release-flash', 'fill-rise', 'cat-settle'] as const) {
-        particles.burst(mode);
-        particles.update(frame('summoning', 1, 0, 100), quality);
-        expect(particles.getStats().activeCount).toBe(QUALITY_PROFILES[quality].burstParticles);
-        expect(particles.getStats().mode).toBe(mode);
-        particles.reset();
-      }
+    for (const [elapsedMs, mode] of [
+      [120, 'release-flash'],
+      [520, 'fill-rise'],
+      [1_500, 'cat-settle'],
+    ] as const) {
+      particles.update(frame('summoning', 1, 0, elapsedMs), 'high');
+      expect(particles.getStats()).toMatchObject({ mode, activeCount: expect.any(Number) });
+      expect(particles.getStats().activeCount).toBeGreaterThan(0);
     }
+    particles.update(frame('summoning', 1, 0, 2_400), 'high');
+    expect(particles.getStats()).toMatchObject({ mode: 'gather', risingLightCount: 0, starFlareCount: 0 });
+    expect(particles.getStats().dustCount).toBeGreaterThan(0);
+    particles.update(frame('summoning', 1, 0, 2_600), 'high');
+    expect(particles.getStats().activeCount).toBe(0);
+    particles.dispose();
+  });
+
+  it('stops flares in the first dissolve quarter while dust fades through the middle', () => {
+    const particles = new ParticleSystem(77);
+    particles.update(frame('dissolving', 1, 0.25), 'high');
+    expect(particles.getStats().starFlareCount).toBe(0);
+    expect(particles.getStats().dustCount).toBeGreaterThan(0);
+    particles.update(frame('dissolving', 1, 0.55), 'high');
+    expect(particles.getStats().dustCount).toBe(0);
     particles.dispose();
   });
 });
