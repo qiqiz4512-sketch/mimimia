@@ -108,7 +108,9 @@ test('keeps the entire mouse, failure, summon, cat, sound, and reset flow cohere
   await page.mouse.down();
   if (!slowRunner) {
     await state(page, 'charging');
-    await page.waitForTimeout(800);
+    // Leave enough headroom below the 2.5 s charge threshold even when the
+    // first pointer event waits on a slow WebGL shader compile.
+    await page.waitForTimeout(150);
   }
   await page.mouse.up();
   await historyIncludes(page, 'dissolving', slowRunner ? 30_000 : 8_000);

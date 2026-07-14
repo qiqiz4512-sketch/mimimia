@@ -1,4 +1,4 @@
-export const EXPECTED_PRIVATE_SHA256: string;
+export const PRIVATE_REFERENCE_SHA256S: ReadonlySet<string>;
 
 export function selectSourceFiles(entries: readonly string[]): string[];
 export function findUnsafeArchiveEntries(entries: readonly string[]): string[];

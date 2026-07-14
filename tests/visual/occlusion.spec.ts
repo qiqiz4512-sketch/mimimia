@@ -23,7 +23,7 @@ async function openFrame(
   quality: typeof qualities[number],
   state: 'idle' | 'charged' | 'summoning' | 'complete',
   viewport: typeof viewports[number],
-  hideParticles = false,
+  hideSpellField = false,
 ) {
   await page.setViewportSize(viewport);
   const params = new URLSearchParams({
@@ -31,7 +31,7 @@ async function openFrame(
     charge: state === 'idle' ? '0' : '1',
     summon: state === 'summoning' ? '0.5' : state === 'complete' ? '1' : '0',
     frameTimeMs: '12345',
-    hideParticles: hideParticles ? '1' : '0',
+    hideSpellField: hideSpellField ? '1' : '0',
   });
   await page.goto(`/?${params}`);
   const canvas = page.locator('canvas[data-render-surface]');
@@ -96,11 +96,20 @@ test('keeps landmarks and timing aligned within two CSS pixels across quality ti
     const frames: Array<{ quality: typeof qualities[number]; points: VisualFrame; timing: unknown }> = [];
     for (const quality of qualities) {
       const { canvas, points } = await openFrame(page, quality, 'complete', viewport);
+      const circle = JSON.parse(await canvas.getAttribute('data-magic-circle') ?? '{}');
       frames.push({
         quality,
         points,
         timing: {
-          circle: JSON.parse(await canvas.getAttribute('data-magic-circle') ?? '{}'),
+          circle: {
+            ringProgress: circle.ringProgress,
+            latticeProgress: circle.latticeProgress,
+            detailProgress: circle.detailProgress,
+            fieldProgress: circle.fieldProgress,
+            releaseScale: circle.releaseScale,
+            releaseFlash: circle.releaseFlash,
+            pillarConvergence: circle.pillarConvergence,
+          },
           summon: JSON.parse(await canvas.getAttribute('data-summon') ?? '{}'),
         },
       });
@@ -124,8 +133,8 @@ test('keeps newly added highlights below eight percent of the face and chest reg
   for (const viewport of viewports) {
     for (const quality of qualities) {
       for (const state of ['charged', 'summoning'] as const) {
-        const withoutParticles = await openFrame(page, quality, state, viewport, true);
-        const baseline = await withoutParticles.canvas.screenshot();
+        const hidden = await openFrame(page, quality, state, viewport, true);
+        const baseline = await hidden.canvas.screenshot();
         const active = await openFrame(page, quality, state, viewport);
         const screenshot = await active.canvas.screenshot();
         const ratio = await protectedHighlightRatio(baseline, screenshot, active.points, viewport);

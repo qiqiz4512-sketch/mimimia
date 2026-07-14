@@ -24,6 +24,7 @@ declare module 'node:fs/promises' {
   export function mkdtemp(prefix: string): Promise<string>;
   export function mkdir(path: string, options?: { recursive?: boolean }): Promise<string | undefined>;
   export function rm(path: string, options?: { recursive?: boolean; force?: boolean }): Promise<void>;
+  export function symlink(target: string, path: string): Promise<void>;
   export function writeFile(path: string, data: string): Promise<void>;
 }
 

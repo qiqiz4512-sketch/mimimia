@@ -1,5 +1,8 @@
 import { defineConfig, devices } from '@playwright/test';
 
+const testPort = process.env.MIMIMIA_TEST_PORT ?? '4174';
+const testBaseUrl = `http://127.0.0.1:${testPort}`;
+
 const stableChannelProjects = process.env.INCLUDE_STABLE_CHANNELS === '1'
   ? [
       {
@@ -26,7 +29,7 @@ export default defineConfig({
   reporter: 'list',
   snapshotPathTemplate: '{testDir}/visual/__snapshots__/{projectName}/{arg}{ext}',
   use: {
-    baseURL: 'http://127.0.0.1:4174',
+    baseURL: testBaseUrl,
     trace: 'retain-on-failure',
   },
   projects: [
@@ -60,8 +63,8 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'npm run dev -- --strictPort',
-    url: 'http://127.0.0.1:4174',
+    command: `npm run dev -- --strictPort --port ${testPort}`,
+    url: testBaseUrl,
     reuseExistingServer: false,
     timeout: 120_000,
   },

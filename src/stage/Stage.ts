@@ -14,6 +14,7 @@ interface StageOptions {
   characterPose?: CharacterDebugPose;
   showCat?: boolean;
   hideParticles?: boolean;
+  hideSpellField?: boolean;
 }
 
 export class Stage {
@@ -30,7 +31,8 @@ export class Stage {
   constructor(options: StageOptions = {}) {
     this.#options = options;
     this.scene.background = new Color(0x0a061b);
-    this.particleSystem.group.visible = !options.hideParticles;
+    this.magicCircle.group.visible = !options.hideSpellField;
+    this.particleSystem.group.visible = !options.hideParticles && !options.hideSpellField;
     this.scene.add(this.#backdrop.group, this.magicCircle.group, this.particleSystem.group);
   }
 

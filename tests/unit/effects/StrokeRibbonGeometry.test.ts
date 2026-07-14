@@ -3,22 +3,63 @@ import { pathsForStage } from '../../../src/effects/magicCircle/geometricStarPat
 import { createStrokeRibbonGeometry } from '../../../src/effects/magicCircle/createStrokeRibbonGeometry';
 
 describe('stroke ribbon geometry', () => {
-  it('creates indexed ribbons with normalized draw and soft-edge attributes', () => {
+  it('packs stroke data into no more than eight WebGPU vertex buffers', () => {
     const geometry = createStrokeRibbonGeometry(pathsForStage('rings'), 0.018);
     expect(geometry.index).not.toBeNull();
-    expect(geometry.getAttribute('arcProgress')).toBeDefined();
-    expect(geometry.getAttribute('pathArc')).toBeDefined();
-    expect(geometry.getAttribute('edgeDistance')).toBeDefined();
-    expect(geometry.getAttribute('strokeRole')).toBeDefined();
-    expect(geometry.getAttribute('microRank')).toBeDefined();
-    expect(geometry.getAttribute('orbitBase')).toBeDefined();
-    expect(geometry.getAttribute('flowSpeed')).toBeDefined();
-    expect(geometry.getAttribute('fieldChannel')).toBeDefined();
-    expect(geometry.getAttribute('dissolveRank')).toBeDefined();
+    expect(Object.keys(geometry.attributes)).toEqual([
+      'position',
+      'strokeDraw',
+      'strokeMotion',
+      'strokeLifecycle',
+    ]);
+    expect(Object.keys(geometry.attributes)).toHaveLength(4);
     expect(geometry.userData.stats.pathCount).toBe(5);
-    const arc = geometry.getAttribute('arcProgress');
-    expect(arc.getX(0)).toBeGreaterThanOrEqual(0);
-    expect(arc.getX(arc.count - 1)).toBeLessThanOrEqual(1);
+    const draw = geometry.getAttribute('strokeDraw');
+    expect(draw.itemSize).toBe(4);
+    expect(draw.getX(0)).toBeGreaterThanOrEqual(0);
+    expect(draw.getX(draw.count - 1)).toBeLessThanOrEqual(1);
+    geometry.dispose();
+  });
+
+  it('preserves every shader semantic in the packed components', () => {
+    const geometry = createStrokeRibbonGeometry([{
+      id: 'packed-semantics',
+      category: 'orbit',
+      stage: 'details',
+      role: 'secondary',
+      points: [
+        { x: 0, y: 0, pathArc: 0.25 },
+        { x: 1, y: 0, pathArc: 0.75 },
+      ],
+      closed: false,
+      drawStart: 0.2,
+      drawEnd: 0.8,
+      microRank: 0.35,
+      orbitBase: 2,
+      flowSpeed: 1.7,
+      fieldChannel: 1,
+      dissolveRank: 0.45,
+    }], 0.024);
+    const draw = geometry.getAttribute('strokeDraw');
+    const motion = geometry.getAttribute('strokeMotion');
+    const lifecycle = geometry.getAttribute('strokeLifecycle');
+
+    expect([draw.getX(0), draw.getY(0), draw.getZ(0), draw.getW(0)])
+      .toEqual([
+        expect.closeTo(0.35, 5),
+        expect.closeTo(0.25, 5),
+        expect.closeTo(1, 5),
+        expect.closeTo(0.5, 5),
+      ]);
+    expect([motion.getX(0), motion.getY(0), motion.getZ(0), motion.getW(0)])
+      .toEqual([
+        expect.closeTo(0.35, 5),
+        expect.closeTo(2, 5),
+        expect.closeTo(1.7, 5),
+        expect.closeTo(0, 5),
+      ]);
+    expect([lifecycle.getX(0), lifecycle.getY(0)])
+      .toEqual([expect.closeTo(1, 5), expect.closeTo(0.45, 5)]);
     geometry.dispose();
   });
 

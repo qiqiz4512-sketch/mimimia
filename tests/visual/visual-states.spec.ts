@@ -10,6 +10,7 @@ const states = [
   { name: 'charging-mid', state: 'charging', charge: 0.5, dissolve: 0, summon: 0 },
   { name: 'charged', state: 'charged', charge: 1, dissolve: 0, summon: 0 },
   { name: 'dissolving-mid', state: 'dissolving', charge: 0.78, dissolve: 0.5, summon: 0 },
+  { name: 'release-flash', state: 'summoning', charge: 1, dissolve: 0, summon: 120 / 2600 },
   { name: 'summoning-mid', state: 'summoning', charge: 1, dissolve: 0, summon: 0.5 },
   { name: 'complete', state: 'complete', charge: 1, dissolve: 0, summon: 1 },
 ] as const;

@@ -42,7 +42,7 @@ describe('r185 postprocessing configuration', () => {
     expect(charged.bloomStrength).toBeGreaterThanOrEqual(phaseThree.bloomStrength);
     expect(reveal.bloomStrength).toBeGreaterThan(charged.bloomStrength);
     expect(dissolve.bloomStrength).toBeLessThan(phaseThree.bloomStrength);
-    expect(charged.bloomStrength).toBeLessThanOrEqual(0.72);
+    expect(charged.bloomStrength).toBeLessThanOrEqual(0.24);
     expect(reveal.bloomStrength).toBeLessThanOrEqual(1.1);
     expect(charged.distortionStrength).toBeLessThanOrEqual(0.003);
     expect(charged.chromaticAberration).toBeLessThanOrEqual(0.04);
@@ -54,7 +54,7 @@ describe('r185 postprocessing configuration', () => {
     expect(before.energy).toBe(0);
     expect(charged.energy).toBe(1);
     expect(charged.bloomStrength).toBeGreaterThan(before.bloomStrength);
-    expect(charged.bloomStrength).toBeLessThanOrEqual(0.72);
+    expect(charged.bloomStrength).toBeLessThanOrEqual(0.24);
   });
 
   it('creates a short release flash and then returns below the flash peak', () => {

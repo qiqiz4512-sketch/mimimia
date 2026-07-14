@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-07-13T22:26:45.581Z",
-  "url": "http://127.0.0.1:4174/?performanceTest=1&backend=webgl2&quality=compatibility",
+  "measuredAt": "2026-07-14T13:45:29.617Z",
+  "url": "http://127.0.0.1:4175/?performanceTest=1&backend=webgl2&quality=compatibility",
   "viewport": {
     "width": 1920,
     "height": 1080
@@ -27,51 +27,56 @@
     "active": false,
     "complete": true,
     "summonCount": 3,
-    "sampleCount": 2077,
-    "averageFps": 118.49274039453748,
-    "onePercentLowFps": 49.09983633387964,
-    "maxFrameGapMs": 84.09999999999854,
-    "maxFrameGapState": "resetting",
-    "maxWorkMs": 85.09999990463257,
+    "sampleCount": 1054,
+    "averageFps": 60.0268811082114,
+    "onePercentLowFps": 53.55404089581172,
+    "maxFrameGapMs": 18.700000000000728,
+    "maxFrameGapState": "charging",
+    "maxWorkMs": 6.400000095367432,
     "maxWorkPhase": "total",
-    "maxWorkState": "resetting",
+    "maxWorkState": "charging",
     "passesStallBudget": true,
-    "startedAt": 13487.200000047684,
-    "endedAt": 31025.9,
+    "passesPreparationBudget": true,
+    "startedAt": 12145.700000047684,
+    "endedAt": 29721.2,
     "objects": {
-      "geometries": 35,
-      "materials": 39,
-      "textures": 44,
-      "sceneObjects": 72,
-      "poolCapacity": 1200
+      "geometries": 40,
+      "materials": 42,
+      "textures": 38,
+      "sceneObjects": 75,
+      "poolCapacity": 1308
     }
   },
   "runtime": {
     "backend": "webgl2",
     "quality": "compatibility",
     "renderer": {
-      "geometries": 36,
-      "textures": 44,
-      "calls": 46610,
+      "geometries": 37,
+      "textures": 38,
+      "calls": 23492,
       "triangles": 809,
       "points": 60,
       "lines": 0
     },
     "particles": {
-      "capacity": 1200,
+      "quality": "compatibility",
+      "capacity": 1308,
       "activeCount": 0,
-      "allocatedObjects": 6,
-      "trailSegments": 0,
+      "allocatedObjects": 4,
+      "dustCount": 0,
+      "risingLightCount": 0,
+      "starFlareCount": 0,
+      "drawCalls": 3,
       "mode": "gather"
     },
     "objects": {
-      "geometries": 35,
-      "materials": 39,
-      "textures": 44,
-      "sceneObjects": 72,
-      "poolCapacity": 1200
+      "geometries": 40,
+      "materials": 42,
+      "textures": 38,
+      "sceneObjects": 75,
+      "poolCapacity": 1308
     },
-    "heapUsedBytes": 27685745,
+    "heapUsedBytes": 23213337,
     "rendererGeneration": 1
   }
 }

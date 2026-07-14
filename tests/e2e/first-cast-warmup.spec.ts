@@ -44,5 +44,5 @@ test('warms all five first-cast states before entry and avoids a 500 ms preparat
   expect(snapshot.maxWorkMs, JSON.stringify(snapshot)).toBeLessThan(500);
   expect(snapshot.passesPreparationBudget).toBe(true);
   expect(snapshot.summonCount).toBe(1);
-  expect(snapshot.objects).toMatchObject({ poolCapacity: 1_200 });
+  expect(snapshot.objects).toMatchObject({ poolCapacity: 1_308 });
 });

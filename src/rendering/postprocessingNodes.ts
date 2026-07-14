@@ -76,7 +76,7 @@ export function getPostProcessingFrame(signals: FrameSignals, profile: QualityPr
   }
 
   const distortionMultiplier = profile.distortion === 'full' ? 1 : profile.distortion === 'light' ? 0.42 : 0;
-  const bloomMultiplier = 0.16 + Math.min(1.1, energy) * 0.42 + releaseFlash * 0.42;
+  const bloomMultiplier = 0.16 + Math.min(1.1, energy) * 0.04 + releaseFlash * 0.42;
   return {
     energy,
     bloomStrength: Math.min(profile.bloomStrength, profile.bloomStrength * bloomMultiplier),

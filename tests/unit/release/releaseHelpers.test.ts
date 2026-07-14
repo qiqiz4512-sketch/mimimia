@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import {
-  EXPECTED_PRIVATE_SHA256,
+  PRIVATE_REFERENCE_SHA256S,
   findPrivateHashCopies,
   findUnsafeArchiveEntries,
   isGitLfsPointer,
@@ -41,11 +41,13 @@ describe('release boundary checks', () => {
     ]);
   });
 
-  it('finds byte-identical copies of the private reference by hash', () => {
+  it('finds byte-identical copies of both private references by hash', () => {
+    const [originalReferenceHash, effectReferenceHash] = [...PRIVATE_REFERENCE_SHA256S];
     expect(findPrivateHashCopies([
       { path: 'safe.png', sha256: 'abc' },
-      { path: 'copied.png', sha256: EXPECTED_PRIVATE_SHA256 },
-    ])).toEqual(['copied.png']);
+      { path: 'copied-original.png', sha256: originalReferenceHash },
+      { path: 'copied-effect.png', sha256: effectReferenceHash },
+    ])).toEqual(['copied-original.png', 'copied-effect.png']);
   });
 
   it('distinguishes unresolved Git LFS pointers from real source files', () => {

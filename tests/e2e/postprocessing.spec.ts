@@ -81,3 +81,12 @@ test('keeps the geometric summon visible when postprocessing initialization fail
   }
   expect(addedWarmPixels / sampled).toBeGreaterThan(0.003);
 });
+
+test('switches to direct rendering when the first postprocessing draw fails', async ({ page }, testInfo) => {
+  await page.goto(withBackend('/?debug=1&fault=postprocessing-render&quality=compatibility&experienceState=charged&charge=1', testInfo.project.name));
+  await waitForPost(page);
+  expect(await readPost(page)).toMatchObject({ renderPath: 'direct-fallback', bloomStrength: 0 });
+  const circle = JSON.parse(await page.locator('canvas[data-render-surface]').getAttribute('data-magic-circle') ?? '{}');
+  expect(circle).toMatchObject({ ringProgress: 1, latticeProgress: 1, detailProgress: 1, pillarCount: 3 });
+  await expect(page.locator('canvas[data-render-surface]')).toBeVisible();
+});

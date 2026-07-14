@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process';
-import { mkdtemp, mkdir, rm, writeFile } from 'node:fs/promises';
+import { mkdtemp, mkdir, rm, symlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 
@@ -39,6 +39,24 @@ describe('asset provenance safeguards', () => {
         CI: '1',
         MIMIMIA_REPOSITORY_ROOT: fixture,
       })).toThrow(/运行时文件引用了私有参考/);
+    } finally {
+      await rm(fixture, { recursive: true, force: true });
+    }
+  });
+
+  it('rejects symbolic links in publicly scanned directories', async () => {
+    const fixture = await mkdtemp(path.join(tmpdir(), 'mimimia-private-symlink-'));
+    try {
+      execFileSync('git', ['init', '-q'], { cwd: fixture });
+      await mkdir(path.join(fixture, 'public'), { recursive: true });
+      await writeFile(path.join(fixture, '.gitignore'), '.superpowers/\n');
+      await writeFile(path.join(fixture, 'private.bin'), 'private bytes');
+      await symlink('../private.bin', path.join(fixture, 'public', 'linked.bin'));
+
+      expect(() => runAssetCheck('assets:private-check', {
+        CI: '1',
+        MIMIMIA_REPOSITORY_ROOT: fixture,
+      })).toThrow(/符号链接/);
     } finally {
       await rm(fixture, { recursive: true, force: true });
     }

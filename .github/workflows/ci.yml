@@ -29,8 +29,17 @@ jobs:
       - run: npm run assets:private-check
       - run: npm run assets:ledger-check
       - run: npm run assets:size-check
+      - name: Build and verify release archives
+        run: |
+          npm run release:package
+          npm run release:verify
       - uses: actions/upload-artifact@v4
         with:
           name: dist
           path: dist
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-packages
+          path: release/*.zip
           if-no-files-found: error

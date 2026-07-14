@@ -6,12 +6,14 @@ import { access, readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { PRIVATE_REFERENCE_SHA256S } from '../release/release-helpers.mjs';
+
 const EXPECTED_PRIVATE_SHA256 = '068cb272738f78eb2ec3f10239de63450afeb433a44af8ee1abd24835b72ea23';
 const PRIVATE_RELATIVE_PATH = '.superpowers/references/user-provided-witch-reference.png';
 const REPOSITORY_ROOT = path.resolve(
   process.env.MIMIMIA_REPOSITORY_ROOT ?? fileURLToPath(new URL('../../', import.meta.url)),
 );
-const HASH_SCAN_ROOTS = ['public', 'src', 'art', 'docs'];
+const HASH_SCAN_ROOTS = ['public', 'src', 'art', 'docs', 'tests'];
 const RUNTIME_SCAN_ROOTS = ['src', 'public'];
 const RUNTIME_SCAN_FILES = [
   'index.html',
@@ -41,6 +43,9 @@ async function listFiles(rootPath) {
   const files = [];
   for (const entry of entries) {
     const absolutePath = path.join(rootPath, entry.name);
+    if (entry.isSymbolicLink()) {
+      throw new Error(`私有参考边界检查失败：公开扫描目录包含符号链接：${absolutePath}`);
+    }
     if (entry.isDirectory()) files.push(...await listFiles(absolutePath));
     if (entry.isFile()) files.push(absolutePath);
   }
@@ -91,7 +96,7 @@ export async function verifyPrivateBoundary(repositoryRoot = REPOSITORY_ROOT) {
     const files = await listFiles(path.join(repositoryRoot, rootName));
     for (const filePath of files) {
       scannedFiles += 1;
-      if (await sha256(filePath) === EXPECTED_PRIVATE_SHA256) {
+      if (PRIVATE_REFERENCE_SHA256S.has(await sha256(filePath))) {
         failures.push(`发现私有参考图副本：${path.relative(repositoryRoot, filePath)}`);
       }
     }

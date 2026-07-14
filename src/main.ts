@@ -241,6 +241,7 @@ function setupGraphicsRecovery(): void {
         quality: tier,
         forceWebGL,
         injectPostProcessingFailure: fault === 'postprocessing-init',
+        injectPostProcessingRenderFailure: fault === 'postprocessing-render',
       });
       canvas.replaceWith(replacementCanvas);
       canvas = replacementCanvas;
@@ -307,9 +308,11 @@ async function initialize(): Promise<void> {
         quality,
         forceWebGL,
         injectPostProcessingFailure: fault === 'postprocessing-init',
+        injectPostProcessingRenderFailure: fault === 'postprocessing-render',
         characterPose: characterPose === 'min' || characterPose === 'max' ? characterPose : 'idle',
         showCat: query.get('showCat') === '1',
         hideParticles: visualTestMode && query.get('hideParticles') === '1',
+        hideSpellField: visualTestMode && query.get('hideSpellField') === '1',
       });
       assetCache = new Map();
       qualityController = new QualityController({
@@ -345,6 +348,7 @@ async function initialize(): Promise<void> {
       quality,
       forceWebGL,
       injectPostProcessingFailure: fault === 'postprocessing-init',
+      injectPostProcessingRenderFailure: fault === 'postprocessing-render',
       onRendererReady: (handle) => {
         gate.mark('rendererReady');
         document.body.dataset.renderBackend = handle.backend;

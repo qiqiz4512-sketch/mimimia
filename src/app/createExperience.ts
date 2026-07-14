@@ -17,7 +17,9 @@ export interface CreateExperienceOptions {
   characterPose?: CharacterDebugPose;
   showCat?: boolean;
   hideParticles?: boolean;
+  hideSpellField?: boolean;
   injectPostProcessingFailure?: boolean;
+  injectPostProcessingRenderFailure?: boolean;
   onRendererReady?: (handle: RendererHandle) => void;
   onWarmupReady?: (report: WarmupReport) => void;
 }
@@ -38,6 +40,7 @@ export async function createExperience(options: CreateExperienceOptions): Promis
     characterPose: options.characterPose,
     showCat: options.showCat,
     hideParticles: options.hideParticles,
+    hideSpellField: options.hideSpellField,
   });
   let renderer: RendererHandle | null = null;
   let audio: AudioController | null = null;
@@ -60,6 +63,7 @@ export async function createExperience(options: CreateExperienceOptions): Promis
       stage.cameraRig.camera,
       QUALITY_PROFILES[options.quality],
       options.injectPostProcessingFailure,
+      options.injectPostProcessingRenderFailure,
     );
     const resize = (width: number, height: number) => {
       handle.resize(width, height);
