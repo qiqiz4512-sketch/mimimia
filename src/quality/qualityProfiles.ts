@@ -1,5 +1,14 @@
 export type QualityTier = 'high' | 'balanced' | 'compatibility';
 
+export interface SpellFieldQuality {
+  pillarCount: 3 | 4 | 5;
+  pillarLayers: 1 | 2 | 3;
+  microMarkCount: 12 | 18 | 24;
+  orbitLightCount: 2 | 4 | 6;
+  risingLightCount: 30 | 54 | 90;
+  starFlareCount: 6 | 12 | 18;
+}
+
 export interface QualityProfile {
   pixelRatioMax: number;
   renderScale: number;
@@ -15,6 +24,7 @@ export interface QualityProfile {
   cameraFraming: 'moon-overlook-v1';
   timeline: 'summoning-v1';
   colorPalette: 'moonlight-violet-v1';
+  spellField: SpellFieldQuality;
 }
 
 const SHARED_COMPOSITION = {
@@ -36,6 +46,14 @@ export const QUALITY_PROFILES: Readonly<Record<QualityTier, QualityProfile>> = {
     chromaticAberration: 0.16,
     trails: 'fullscreen-and-4-particle',
     distortion: 'full',
+    spellField: {
+      pillarCount: 5,
+      pillarLayers: 3,
+      microMarkCount: 24,
+      orbitLightCount: 6,
+      risingLightCount: 90,
+      starFlareCount: 18,
+    },
     ...SHARED_COMPOSITION,
   },
   balanced: {
@@ -50,6 +68,14 @@ export const QUALITY_PROFILES: Readonly<Record<QualityTier, QualityProfile>> = {
     chromaticAberration: 0.08,
     trails: '2-particle',
     distortion: 'light',
+    spellField: {
+      pillarCount: 4,
+      pillarLayers: 2,
+      microMarkCount: 18,
+      orbitLightCount: 4,
+      risingLightCount: 54,
+      starFlareCount: 12,
+    },
     ...SHARED_COMPOSITION,
   },
   compatibility: {
@@ -64,6 +90,14 @@ export const QUALITY_PROFILES: Readonly<Record<QualityTier, QualityProfile>> = {
     chromaticAberration: 0,
     trails: 'off',
     distortion: 'off',
+    spellField: {
+      pillarCount: 3,
+      pillarLayers: 1,
+      microMarkCount: 12,
+      orbitLightCount: 2,
+      risingLightCount: 30,
+      starFlareCount: 6,
+    },
     ...SHARED_COMPOSITION,
   },
 };

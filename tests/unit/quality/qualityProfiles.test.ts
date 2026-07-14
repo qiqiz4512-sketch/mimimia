@@ -57,4 +57,31 @@ describe('quality profiles', () => {
     expect(new Set(profiles.map((profile) => profile.timeline))).toEqual(new Set(['summoning-v1']));
     expect(new Set(profiles.map((profile) => profile.colorPalette))).toEqual(new Set(['moonlight-violet-v1']));
   });
+
+  it('uses the approved spell field caps for every tier', () => {
+    expect(QUALITY_PROFILES.high.spellField).toEqual({
+      pillarCount: 5,
+      pillarLayers: 3,
+      microMarkCount: 24,
+      orbitLightCount: 6,
+      risingLightCount: 90,
+      starFlareCount: 18,
+    });
+    expect(QUALITY_PROFILES.balanced.spellField).toEqual({
+      pillarCount: 4,
+      pillarLayers: 2,
+      microMarkCount: 18,
+      orbitLightCount: 4,
+      risingLightCount: 54,
+      starFlareCount: 12,
+    });
+    expect(QUALITY_PROFILES.compatibility.spellField).toEqual({
+      pillarCount: 3,
+      pillarLayers: 1,
+      microMarkCount: 12,
+      orbitLightCount: 2,
+      risingLightCount: 30,
+      starFlareCount: 6,
+    });
+  });
 });
