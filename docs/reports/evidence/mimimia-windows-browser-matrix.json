@@ -1,9 +1,9 @@
 {
-  "measuredAt": "2026-07-14T00:58:29.571Z",
+  "measuredAt": "2026-07-14T03:48:13.925Z",
   "workflow": {
     "name": "Release browser matrix",
-    "runId": 29297272868,
-    "url": "https://github.com/lileee/mimimia/actions/runs/29297272868",
+    "runId": 29304327300,
+    "url": "https://github.com/qiqiz4512-sketch/mimimia/actions/runs/29304327300",
     "conclusion": "success"
   },
   "records": [
@@ -17,9 +17,9 @@
         "height": 720
       },
       "backend": "webgl2",
-      "quality": "compatibility",
-      "duration": "1.4m",
-      "jobUrl": "https://github.com/lileee/mimimia/actions/runs/29297272868/job/86973415884",
+      "quality": "high",
+      "duration": "59s",
+      "jobUrl": "https://github.com/qiqiz4512-sketch/mimimia/actions/runs/29304327300/job/86994490309",
       "checks": {
         "rightClickIgnored": true,
         "soundDidNotInterrupt": true,
@@ -42,8 +42,8 @@
       },
       "backend": "webgl2",
       "quality": "compatibility",
-      "duration": "1.1m",
-      "jobUrl": "https://github.com/lileee/mimimia/actions/runs/29297272868/job/86973415917",
+      "duration": "1m40s",
+      "jobUrl": "https://github.com/qiqiz4512-sketch/mimimia/actions/runs/29304327300/job/86994490285",
       "checks": {
         "rightClickIgnored": true,
         "soundDidNotInterrupt": true,

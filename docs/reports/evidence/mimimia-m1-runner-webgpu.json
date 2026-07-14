@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-07-14T00:57:36.039Z",
+  "measuredAt": "2026-07-14T03:47:50.177Z",
   "url": "http://127.0.0.1:4174/?performanceTest=1",
   "viewport": {
     "width": 1920,
@@ -27,17 +27,18 @@
     "active": false,
     "complete": true,
     "summonCount": 3,
-    "sampleCount": 912,
-    "averageFps": 51.1721336310893,
-    "onePercentLowFps": 10.2859493931289,
-    "maxFrameGapMs": 119.09999999999854,
-    "maxFrameGapState": "charging",
-    "maxWorkMs": 86.39999999999418,
+    "sampleCount": 1044,
+    "averageFps": 58.03643398355635,
+    "onePercentLowFps": 14.254243877154522,
+    "maxFrameGapMs": 217.6999999999971,
+    "maxFrameGapState": "complete",
+    "maxWorkMs": 144.6999999999971,
     "maxWorkPhase": "total",
-    "maxWorkState": "charging",
+    "maxWorkState": "summoning",
     "passesStallBudget": true,
-    "startedAt": 26864.399999999994,
-    "endedAt": 44703.5,
+    "passesPreparationBudget": true,
+    "startedAt": 23856.800000000003,
+    "endedAt": 41863.2,
     "objects": {
       "geometries": 36,
       "materials": 39,
@@ -52,7 +53,7 @@
     "renderer": {
       "geometries": 36,
       "textures": 44,
-      "calls": 22776,
+      "calls": 27125,
       "triangles": 814,
       "points": 110,
       "lines": 0
@@ -71,7 +72,7 @@
       "sceneObjects": 72,
       "poolCapacity": 1200
     },
-    "heapUsedBytes": 37506706,
+    "heapUsedBytes": 22966606,
     "rendererGeneration": 1
   }
 }

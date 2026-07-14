@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-07-14T00:57:16.163Z",
+  "measuredAt": "2026-07-14T03:47:46.926Z",
   "url": "http://127.0.0.1:4174/",
   "browser": {
     "name": "Safari",
@@ -34,18 +34,18 @@
     "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.4 Safari/605.1.15",
     "particleStats": {
       "allocatedObjects": 6,
-      "trailSegments": 2,
+      "trailSegments": 0,
       "activeCount": 0,
       "mode": "gather",
       "capacity": 1200
     },
-    "quality": "balanced",
+    "quality": "compatibility",
     "state": "complete"
   },
   "reset": {
     "particleStats": {
       "allocatedObjects": 6,
-      "trailSegments": 2,
+      "trailSegments": 0,
       "activeCount": 0,
       "mode": "gather",
       "capacity": 1200
@@ -68,5 +68,60 @@
     "state": "idle",
     "catVisible": "false"
   },
-  "screenshot": "/Users/runner/work/mimimia/mimimia/test-results/browser/safari-complete.png"
+  "screenshot": "/Users/runner/work/mimimia/mimimia/test-results/browser/safari-complete.png",
+  "visualEvidence": {
+    "crop": {
+      "left": 154,
+      "top": 34,
+      "width": 717,
+      "height": 506
+    },
+    "sample": {
+      "width": 96,
+      "height": 96
+    },
+    "brightPixelFraction": 0,
+    "maximumLuminance": 30.583599999999997,
+    "meanLuminance": 12.08734116753485,
+    "luminanceDeviation": 5.735594624826927,
+    "passed": false
+  },
+  "canvasScreenshot": "/Users/runner/work/mimimia/mimimia/test-results/browser/safari-complete-canvas.png",
+  "canvasVisualEvidence": {
+    "crop": {
+      "left": 0,
+      "top": 0,
+      "width": 717,
+      "height": 472
+    },
+    "sample": {
+      "width": 96,
+      "height": 96
+    },
+    "brightPixelFraction": 0.08268229166666667,
+    "maximumLuminance": 254.99999999999997,
+    "meanLuminance": 31.552781814236237,
+    "luminanceDeviation": 45.20696547275206,
+    "passed": true
+  },
+  "canvasDiagnostics": {
+    "height": 472,
+    "display": "block",
+    "visibility": "visible",
+    "width": 717,
+    "glError": 0,
+    "clientWidth": 1024,
+    "opacity": "1",
+    "contextAttributes": {
+      "alpha": true,
+      "depth": true,
+      "premultipliedAlpha": true,
+      "antialias": true,
+      "failIfMajorPerformanceCaveat": false,
+      "preserveDrawingBuffer": true,
+      "powerPreference": "high-performance",
+      "stencil": false
+    },
+    "clientHeight": 674
+  }
 }
