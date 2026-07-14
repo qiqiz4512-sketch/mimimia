@@ -51,6 +51,24 @@ describe('PerformanceSampler', () => {
     });
   });
 
+  it('separates page work from external frame scheduling stalls', () => {
+    const sampler = new PerformanceSampler();
+    sampler.beginProfile(0);
+    sampler.observeFrame(0, valid);
+    sampler.recordFrameWork('charging', { total: 4 });
+    sampler.observeFrame(600, valid);
+
+    expect(sampler.getSnapshot()).toMatchObject({
+      maxFrameGapMs: 600,
+      maxWorkMs: 4,
+      passesStallBudget: false,
+      passesPreparationBudget: true,
+    });
+
+    sampler.recordFrameWork('charging', { total: 500 });
+    expect(sampler.getSnapshot().passesPreparationBudget).toBe(false);
+  });
+
   it('counts unique runtime resources by the approved categories', () => {
     const geometry = {};
     const material = {};

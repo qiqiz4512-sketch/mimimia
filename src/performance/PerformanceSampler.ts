@@ -135,6 +135,7 @@ export class PerformanceSampler {
       maxWorkPhase: this.#maxWork.phase,
       maxWorkState: this.#maxWork.state,
       passesStallBudget: maxFrameGapMs < STALL_BUDGET_MS,
+      passesPreparationBudget: this.#maxWork.durationMs < STALL_BUDGET_MS,
       startedAt: this.#startedAt,
       endedAt: this.#endedAt,
       objects: this.#objects ? { ...this.#objects } : null,

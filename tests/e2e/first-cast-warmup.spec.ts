@@ -32,6 +32,7 @@ test('warms all five first-cast states before entry and avoids a 500 ms preparat
         maxWorkPhase: string | null;
         maxWorkState: string | null;
         passesStallBudget: boolean;
+        passesPreparationBudget: boolean;
         summonCount: number;
         objects: Record<string, number> | null;
       } };
@@ -40,8 +41,8 @@ test('warms all five first-cast states before entry and avoids a 500 ms preparat
     return hook.snapshot();
   });
   expect(snapshot.sampleCount).toBeGreaterThan(0);
-  expect(snapshot.maxFrameGapMs, JSON.stringify(snapshot)).toBeLessThan(500);
-  expect(snapshot.passesStallBudget).toBe(true);
+  expect(snapshot.maxWorkMs, JSON.stringify(snapshot)).toBeLessThan(500);
+  expect(snapshot.passesPreparationBudget).toBe(true);
   expect(snapshot.summonCount).toBe(1);
   expect(snapshot.objects).toMatchObject({ poolCapacity: 1_200 });
 });

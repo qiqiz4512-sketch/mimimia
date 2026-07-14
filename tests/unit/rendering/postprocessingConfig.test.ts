@@ -48,6 +48,15 @@ describe('r185 postprocessing configuration', () => {
     expect(charged.chromaticAberration).toBeLessThanOrEqual(0.04);
   });
 
+  it('ties spatial distortion phase to the supplied frame time', () => {
+    const profile = QUALITY_PROFILES.high;
+    const first = getPostProcessingFrame(frame('charged', 1), profile);
+    const fixed = getPostProcessingFrame({ ...frame('charged', 1), nowMs: 12_345 }, profile);
+
+    expect(first.distortionTimeSeconds).toBe(1);
+    expect(fixed.distortionTimeSeconds).toBe(12.345);
+  });
+
   it('uses RenderPipeline and rejects every legacy or custom shader path', () => {
     const sources = `${postProcessingSource}\n${postProcessingNodesSource}`;
     for (const forbidden of ['EffectComposer', 'ShaderMaterial', 'RawShaderMaterial', 'onBeforeCompile']) {

@@ -5,7 +5,6 @@ import {
   normalize,
   oneMinus,
   smoothstep,
-  time,
   uniform,
   uv,
   vec2,
@@ -26,12 +25,14 @@ export interface PostProcessingFrame {
   energy: number;
   bloomStrength: number;
   distortionStrength: number;
+  distortionTimeSeconds: number;
   chromaticAberration: number;
   afterImageDamp: number;
 }
 
 export interface SpatialDistortionControls {
   strength: { value: number };
+  timeSeconds: { value: number };
 }
 
 const clamp01 = (value: number) => Math.min(1, Math.max(0, value));
@@ -71,6 +72,7 @@ export function getPostProcessingFrame(signals: FrameSignals, profile: QualityPr
     energy,
     bloomStrength: profile.bloomStrength * bloomMultiplier,
     distortionStrength: distortionMultiplier * energy * 0.0028,
+    distortionTimeSeconds: Math.max(0, signals.nowMs) / 1_000,
     chromaticAberration: profile.chromaticAberration * Math.min(1, energy) * 0.25,
     afterImageDamp: profile.trails === 'fullscreen-and-4-particle' ? 0.18 + Math.min(1, energy) * 0.68 : 0,
   };
@@ -81,13 +83,14 @@ export function createSpatialDistortion(input: Node<'vec4'>): {
   controls: SpatialDistortionControls;
 } {
   const strength = uniform(0);
+  const timeSeconds = uniform(0);
   const source = convertToTexture(input);
   const coordinates = uv();
   const centered = coordinates.sub(vec2(0.5, 0.5));
   const radius = length(centered);
   const direction = normalize(centered.add(vec2(0.0001, 0.0001)));
-  const wave = radius.mul(22).sub(time.mul(1.8)).sin();
+  const wave = radius.mul(22).sub(timeSeconds.mul(1.8)).sin();
   const envelope = oneMinus(smoothstep(0.08, 0.86, radius));
   const distortedCoordinates = coordinates.add(direction.mul(wave).mul(envelope).mul(strength));
-  return { outputNode: source.sample(distortedCoordinates), controls: { strength } };
+  return { outputNode: source.sample(distortedCoordinates), controls: { strength, timeSeconds } };
 }

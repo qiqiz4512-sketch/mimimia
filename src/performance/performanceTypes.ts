@@ -26,6 +26,7 @@ export interface PerformanceSnapshot {
   maxWorkPhase: string | null;
   maxWorkState: string | null;
   passesStallBudget: boolean;
+  passesPreparationBudget: boolean;
   startedAt: number | null;
   endedAt: number | null;
   objects: RuntimeObjectStats | null;

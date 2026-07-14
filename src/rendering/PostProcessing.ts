@@ -95,6 +95,7 @@ export class PostProcessing {
     this.#bloom.radius.value = 0.24 + Math.min(1, this.#frame.energy) * 0.16;
     this.#bloom.threshold.value = 0.68;
     this.#distortionControls.strength.value = this.#frame.distortionStrength;
+    this.#distortionControls.timeSeconds.value = this.#frame.distortionTimeSeconds;
     this.#chromaticStrength.value = this.#frame.chromaticAberration;
     this.#afterImageDamp.value = this.#frame.afterImageDamp;
   }
