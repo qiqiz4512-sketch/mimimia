@@ -5,7 +5,7 @@
 | 项目 | 状态 | 证据 |
 | --- | --- | --- |
 | 正式构建 | 通过 | `npm run build` |
-| 自动功能与视觉验收 | 通过 | `npm run test:acceptance` 通过：117 项单元检查、4 套完整浏览器流程、44 项视觉与遮挡检查；另有完整回归 100 项通过、4 项按环境跳过；[CI 运行 29339984127](https://github.com/qiqiz4512-sketch/mimimia/actions/runs/29339984127) 全部成功 |
+| 自动功能与视觉验收 | 通过 | `npm run test:acceptance` 通过：117 项单元检查、4 套完整浏览器流程、44 项视觉与遮挡检查；另有完整回归 100 项通过、4 项按环境跳过；最终 [CI 运行 29348574473](https://github.com/qiqiz4512-sketch/mimimia/actions/runs/29348574473) 全部成功 |
 | 私有参考边界 | 通过 | 干净 CI 与本地复测均通过；两个私有参考的内容指纹均未进入源码、基准图或发布包，公开扫描目录拒绝符号链接 |
 | 素材台账 | 通过 | 已检查 65 个素材文件和 92 条记录 |
 | 首次下载量 ≤15 MiB | 通过 | 本地改版 11.16 MiB；公开改版 11.17 MiB，低于 15 MiB；见 `transfer-size-report.md` |
@@ -21,11 +21,11 @@
 | macOS Safari | 通过 | Safari 26.4 全部交互与直接画布可见性通过；角色与灵猫清晰可见，图形错误为 0 |
 | 普通设备性能 | 通过 | M1 级测试机：自动 58.04 帧，WebGL 2 兼容档 49.19 帧 |
 | 依赖安全核对 | 通过 | 已知漏洞 0 项 |
-| 源码包与构建包 | 通过 | 本地已生成 129 MB 源码包与 5.9 MB 运行包；最终附件指纹以上线时 CI 生成的不可变成品为准 |
+| 源码包与构建包 | 通过 | CI 成品：源码包 136,519,009 字节，SHA-256 `d850fb20…153a`；运行包 6,189,507 字节，SHA-256 `16f9b122…6445` |
 | 发布包私有扫描与全新重建 | 通过 | 两个压缩包私有扫描通过；源码包在空白目录完成安装与构建，运行包通过静态服务器打开检查；依赖漏洞 0 项 |
-| 公开 Pages 网址 | 通过 | https://qiqiz4512-sketch.github.io/mimimia/；[Pages 运行 29341440949](https://github.com/qiqiz4512-sketch/mimimia/actions/runs/29341440949) 成功 |
+| 公开 Pages 网址 | 通过 | https://qiqiz4512-sketch.github.io/mimimia/；最终 [Pages 运行 29349895150](https://github.com/qiqiz4512-sketch/mimimia/actions/runs/29349895150) 成功 |
 | 公开网址空缓存回归 | 通过 | 11,714,079 字节；进入按钮开放，没有失败请求，见 `transfer-size-report.md` |
 | 公开网址完整流程 | 通过 | 正式版 Chrome 实际完成十项验收；WebGL 2、高—均衡—兼容自动降级、资源失败和真实标签页失焦均通过，见 [完整流程](evidence/mimimia-public-full-flow.json) 与 [失焦记录](evidence/mimimia-public-focus-loss.json) |
-| 发布包与版本页 | 待最终提交后发布 | 保留旧版 `v1.0.0` 历史；纯几何白金星阵改版将发布为 `v1.1.0`，附带独立源码包与运行包，不移动旧标签 |
+| 发布包与版本页 | 通过 | [v1.1.0 · 纯几何白金星阵](https://github.com/qiqiz4512-sketch/mimimia/releases/tag/v1.1.0) 已发布 CI 原始源码包与运行包；公开附件指纹与 CI 下载件一致，旧版 `v1.0.0` 历史完整保留 |
 
 公开改版验收时间：2026-07-14 23:53（中国标准时间）。未完成项不得标记为通过；近似浏览器结果不替代真实稳定版记录。

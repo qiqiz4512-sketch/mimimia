@@ -44,7 +44,7 @@ npm run release:verify
 
 ## 发布 v1.1.0
 
-纯几何白金星阵改版完成最终回归与 Pages 验收后，创建 `v1.1.0` 标签和 GitHub Release，并附加：
+纯几何白金星阵改版完成最终回归与 Pages 验收后，已经创建 `v1.1.0` 标签和 [GitHub Release](https://github.com/qiqiz4512-sketch/mimimia/releases/tag/v1.1.0)，并附加：
 
 - `release/mimimia-source-v1.1.0.zip`
 - `release/mimimia-dist-v1.1.0.zip`
