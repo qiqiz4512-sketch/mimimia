@@ -1,0 +1,451 @@
+{
+  "measuredAt": "2026-07-14T05:28:37.907Z",
+  "url": "https://qiqiz4512-sketch.github.io/mimimia/",
+  "browser": {
+    "name": "Google Chrome",
+    "version": "150.0.7871.115",
+    "channel": "chrome"
+  },
+  "cacheDisabled": true,
+  "readyState": "entry",
+  "limitBytes": 15728640,
+  "totalEncodedBytes": 11710025,
+  "passes": true,
+  "categories": {
+    "program": 264629,
+    "styles": 3878,
+    "magicalGirl": 8478315,
+    "moonCat": 2444610,
+    "audio": 517762,
+    "other": 831
+  },
+  "requests": [
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/magical-girl/body-legs.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Image",
+      "encodedBytes": 1411851
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/magical-girl/body-legs.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Fetch",
+      "encodedBytes": 1411792
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/magical-girl/skirt.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Image",
+      "encodedBytes": 714467
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/magical-girl/skirt.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Fetch",
+      "encodedBytes": 714316
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/magical-girl/staff.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Image",
+      "encodedBytes": 463677
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/magical-girl/staff.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Fetch",
+      "encodedBytes": 463527
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/moon-cat/body.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Fetch",
+      "encodedBytes": 457160
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/moon-cat/body.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Image",
+      "encodedBytes": 457134
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/magical-girl/back-hair.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Fetch",
+      "encodedBytes": 355363
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/magical-girl/back-hair.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Image",
+      "encodedBytes": 355351
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/moon-cat/head.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Image",
+      "encodedBytes": 266554
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/moon-cat/head.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Fetch",
+      "encodedBytes": 266514
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/index-C0HdfVKA.js",
+      "status": 200,
+      "mimeType": "application/javascript",
+      "type": "Script",
+      "encodedBytes": 264629
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/audio/ambient-moon-void.mp3",
+      "status": 200,
+      "mimeType": "audio/mp3",
+      "type": "Fetch",
+      "encodedBytes": 257302
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/magical-girl/ribbon-right.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Fetch",
+      "encodedBytes": 219160
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/magical-girl/ribbon-right.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Image",
+      "encodedBytes": 219010
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/moon-cat/tail.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Image",
+      "encodedBytes": 191925
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/moon-cat/tail.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Fetch",
+      "encodedBytes": 191924
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/magical-girl/face.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Image",
+      "encodedBytes": 185965
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/magical-girl/face.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Fetch",
+      "encodedBytes": 185908
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/magical-girl/ribbon-left.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Image",
+      "encodedBytes": 176857
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/magical-girl/ribbon-left.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Fetch",
+      "encodedBytes": 176847
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/magical-girl/front-hair.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Fetch",
+      "encodedBytes": 160747
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/magical-girl/front-hair.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Image",
+      "encodedBytes": 160621
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/magical-girl/hat-ornament.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Fetch",
+      "encodedBytes": 137418
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/magical-girl/hat-ornament.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Image",
+      "encodedBytes": 137415
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/magical-girl/cape-outer.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Fetch",
+      "encodedBytes": 118190
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/magical-girl/cape-outer.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Image",
+      "encodedBytes": 118094
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/magical-girl/hat-body.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Fetch",
+      "encodedBytes": 110479
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/magical-girl/hat-body.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Image",
+      "encodedBytes": 110466
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/magical-girl/staff-glow.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Fetch",
+      "encodedBytes": 100819
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/magical-girl/staff-glow.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Image",
+      "encodedBytes": 100804
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/moon-cat/ear-left.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Fetch",
+      "encodedBytes": 94641
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/moon-cat/ear-left.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Image",
+      "encodedBytes": 94629
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/moon-cat/ear-right.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Fetch",
+      "encodedBytes": 86330
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/moon-cat/ear-right.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Image",
+      "encodedBytes": 86314
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/moon-cat/eyes-open.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Image",
+      "encodedBytes": 83869
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/moon-cat/eyes-open.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Fetch",
+      "encodedBytes": 83732
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/audio/charge-rise.mp3",
+      "status": 200,
+      "mimeType": "audio/mp3",
+      "type": "Fetch",
+      "encodedBytes": 51688
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/audio/charge-low.mp3",
+      "status": 200,
+      "mimeType": "audio/mp3",
+      "type": "Fetch",
+      "encodedBytes": 51611
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/audio/charge-crystals.mp3",
+      "status": 200,
+      "mimeType": "audio/mp3",
+      "type": "Fetch",
+      "encodedBytes": 51607
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/magical-girl/eyes-open.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Image",
+      "encodedBytes": 47709
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/magical-girl/eyes-open.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Fetch",
+      "encodedBytes": 47699
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/audio/cat-form.mp3",
+      "status": 200,
+      "mimeType": "audio/mp3",
+      "type": "Fetch",
+      "encodedBytes": 35269
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/moon-cat/glow.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Image",
+      "encodedBytes": 30530
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/moon-cat/glow.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Fetch",
+      "encodedBytes": 30518
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/magical-girl/cape-lining.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Image",
+      "encodedBytes": 29496
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/audio/release-chime.mp3",
+      "status": 200,
+      "mimeType": "audio/mp3",
+      "type": "Fetch",
+      "encodedBytes": 29478
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/magical-girl/cape-lining.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Fetch",
+      "encodedBytes": 29377
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/audio/dissolve.mp3",
+      "status": 200,
+      "mimeType": "audio/mp3",
+      "type": "Fetch",
+      "encodedBytes": 21353
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/audio/charged-cue.mp3",
+      "status": 200,
+      "mimeType": "audio/mp3",
+      "type": "Fetch",
+      "encodedBytes": 19454
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/moon-cat/eyes-closed.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Fetch",
+      "encodedBytes": 10661
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/moon-cat/eyes-closed.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Image",
+      "encodedBytes": 10516
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/magical-girl/eyes-closed.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Image",
+      "encodedBytes": 6417
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/magical-girl/eyes-closed.webp",
+      "status": 200,
+      "mimeType": "image/webp",
+      "type": "Fetch",
+      "encodedBytes": 6306
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/index-DagRYlX3.css",
+      "status": 200,
+      "mimeType": "text/css",
+      "type": "Stylesheet",
+      "encodedBytes": 3878
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/magical-girl/rig.json",
+      "status": 200,
+      "mimeType": "application/json",
+      "type": "Fetch",
+      "encodedBytes": 1087
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/magical-girl/rig.json",
+      "status": 200,
+      "mimeType": "application/json",
+      "type": "Fetch",
+      "encodedBytes": 1080
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/moon-cat/rig.json",
+      "status": 200,
+      "mimeType": "application/json",
+      "type": "Fetch",
+      "encodedBytes": 886
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/",
+      "status": 200,
+      "mimeType": "text/html",
+      "type": "Document",
+      "encodedBytes": 831
+    },
+    {
+      "url": "https://qiqiz4512-sketch.github.io/mimimia/assets/characters/moon-cat/rig.json",
+      "status": 200,
+      "mimeType": "application/json",
+      "type": "Fetch",
+      "encodedBytes": 773
+    }
+  ]
+}
