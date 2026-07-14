@@ -1,0 +1,59 @@
+{
+  "measuredAt": "2026-07-14T00:58:29.571Z",
+  "workflow": {
+    "name": "Release browser matrix",
+    "runId": 29297272868,
+    "url": "https://github.com/lileee/mimimia/actions/runs/29297272868",
+    "conclusion": "success"
+  },
+  "records": [
+    {
+      "system": "Windows Server 2025",
+      "project": "chrome-stable",
+      "browserVersion": "149.0.7827.201",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/149.0.0.0 Safari/537.36",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "backend": "webgl2",
+      "quality": "compatibility",
+      "duration": "1.4m",
+      "jobUrl": "https://github.com/lileee/mimimia/actions/runs/29297272868/job/86973415884",
+      "checks": {
+        "rightClickIgnored": true,
+        "soundDidNotInterrupt": true,
+        "earlyReleaseDissolved": true,
+        "heldChargeStayedSafe": true,
+        "completedSummon": true,
+        "catStayedVisible": true,
+        "catFollowedPointer": true,
+        "resetClearedSpell": true
+      }
+    },
+    {
+      "system": "Windows Server 2025",
+      "project": "edge-stable",
+      "browserVersion": "149.0.4022.98",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "backend": "webgl2",
+      "quality": "compatibility",
+      "duration": "1.1m",
+      "jobUrl": "https://github.com/lileee/mimimia/actions/runs/29297272868/job/86973415917",
+      "checks": {
+        "rightClickIgnored": true,
+        "soundDidNotInterrupt": true,
+        "earlyReleaseDissolved": true,
+        "heldChargeStayedSafe": true,
+        "completedSummon": true,
+        "catStayedVisible": true,
+        "catFollowedPointer": true,
+        "resetClearedSpell": true
+      }
+    }
+  ]
+}

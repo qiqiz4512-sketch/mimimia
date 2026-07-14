@@ -1,0 +1,72 @@
+{
+  "measuredAt": "2026-07-14T00:57:16.163Z",
+  "url": "http://127.0.0.1:4174/",
+  "browser": {
+    "name": "Safari",
+    "version": "26.4",
+    "platform": "macOS"
+  },
+  "host": {
+    "platform": "darwin",
+    "release": "25.4.0",
+    "arch": "arm64",
+    "memoryBytes": 7516192768
+  },
+  "viewport": {
+    "width": 1024,
+    "height": 674
+  },
+  "requestedQuality": "auto",
+  "checks": {
+    "rightClickIgnored": true,
+    "earlyReleaseDissolved": true,
+    "heldChargeStayedSafe": true,
+    "completedSummon": true,
+    "catStayedVisible": true,
+    "catFollowedPointer": true,
+    "soundDidNotInterrupt": true,
+    "resetClearedSpell": true
+  },
+  "runtime": {
+    "catVisible": "true",
+    "muted": "false",
+    "backend": "webgl2",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.4 Safari/605.1.15",
+    "particleStats": {
+      "allocatedObjects": 6,
+      "trailSegments": 2,
+      "activeCount": 0,
+      "mode": "gather",
+      "capacity": 1200
+    },
+    "quality": "balanced",
+    "state": "complete"
+  },
+  "reset": {
+    "particleStats": {
+      "allocatedObjects": 6,
+      "trailSegments": 2,
+      "activeCount": 0,
+      "mode": "gather",
+      "capacity": 1200
+    },
+    "magicCircle": {
+      "outerRotation": 0,
+      "centerProgress": 0,
+      "middleOpacity": 0,
+      "centerRotation": 0,
+      "auxiliaryProgress": 0,
+      "opacity": 0,
+      "auxiliaryOpacity": 0,
+      "outerOpacity": 0,
+      "outerProgress": 0,
+      "centerOpacity": 0,
+      "middleProgress": 0,
+      "brightness": 0.72,
+      "middleRotation": 0
+    },
+    "state": "idle",
+    "catVisible": "false"
+  },
+  "screenshot": "/Users/runner/work/mimimia/mimimia/test-results/browser/safari-complete.png"
+}

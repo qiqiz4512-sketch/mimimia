@@ -1,0 +1,77 @@
+{
+  "measuredAt": "2026-07-14T00:58:58.542Z",
+  "url": "http://127.0.0.1:4174/?performanceTest=1&backend=webgl2&quality=compatibility",
+  "viewport": {
+    "width": 1920,
+    "height": 1080
+  },
+  "stableBeforeCastMs": 10000,
+  "castCount": 3,
+  "headed": true,
+  "browser": {
+    "name": "Google Chrome",
+    "version": "150.0.7871.115",
+    "channel": "chrome"
+  },
+  "host": {
+    "platform": "darwin",
+    "release": "25.4.0",
+    "arch": "arm64",
+    "memoryBytes": 7516192768
+  },
+  "requestedBackend": "webgl2",
+  "requestedQuality": "compatibility",
+  "screenshot": null,
+  "consoleErrors": [],
+  "performance": {
+    "active": false,
+    "complete": true,
+    "summonCount": 3,
+    "sampleCount": 819,
+    "averageFps": 45.275383790417536,
+    "onePercentLowFps": 6.590992310508936,
+    "maxFrameGapMs": 400.5,
+    "maxFrameGapState": "complete",
+    "maxWorkMs": 210.5,
+    "maxWorkPhase": "total",
+    "maxWorkState": "charging",
+    "passesStallBudget": true,
+    "startedAt": 20560.399999999994,
+    "endedAt": 38717.3,
+    "objects": {
+      "geometries": 35,
+      "materials": 39,
+      "textures": 38,
+      "sceneObjects": 72,
+      "poolCapacity": 1200
+    }
+  },
+  "runtime": {
+    "backend": "webgl2",
+    "quality": "compatibility",
+    "renderer": {
+      "geometries": 36,
+      "textures": 38,
+      "calls": 19012,
+      "triangles": 809,
+      "points": 60,
+      "lines": 0
+    },
+    "particles": {
+      "capacity": 1200,
+      "activeCount": 0,
+      "allocatedObjects": 6,
+      "trailSegments": 0,
+      "mode": "gather"
+    },
+    "objects": {
+      "geometries": 35,
+      "materials": 39,
+      "textures": 38,
+      "sceneObjects": 72,
+      "poolCapacity": 1200
+    },
+    "heapUsedBytes": 28369694,
+    "rendererGeneration": 1
+  }
+}

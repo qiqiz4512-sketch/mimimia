@@ -1,0 +1,77 @@
+{
+  "measuredAt": "2026-07-14T00:57:36.039Z",
+  "url": "http://127.0.0.1:4174/?performanceTest=1",
+  "viewport": {
+    "width": 1920,
+    "height": 1080
+  },
+  "stableBeforeCastMs": 10000,
+  "castCount": 3,
+  "headed": true,
+  "browser": {
+    "name": "Google Chrome",
+    "version": "149.0.7827.201",
+    "channel": "chrome"
+  },
+  "host": {
+    "platform": "darwin",
+    "release": "25.4.0",
+    "arch": "arm64",
+    "memoryBytes": 7516192768
+  },
+  "requestedBackend": null,
+  "requestedQuality": null,
+  "screenshot": "/Users/runner/work/mimimia/mimimia/test-results/performance/ordinary-device-complete.png",
+  "consoleErrors": [],
+  "performance": {
+    "active": false,
+    "complete": true,
+    "summonCount": 3,
+    "sampleCount": 912,
+    "averageFps": 51.1721336310893,
+    "onePercentLowFps": 10.2859493931289,
+    "maxFrameGapMs": 119.09999999999854,
+    "maxFrameGapState": "charging",
+    "maxWorkMs": 86.39999999999418,
+    "maxWorkPhase": "total",
+    "maxWorkState": "charging",
+    "passesStallBudget": true,
+    "startedAt": 26864.399999999994,
+    "endedAt": 44703.5,
+    "objects": {
+      "geometries": 36,
+      "materials": 39,
+      "textures": 44,
+      "sceneObjects": 72,
+      "poolCapacity": 1200
+    }
+  },
+  "runtime": {
+    "backend": "webgpu",
+    "quality": "balanced",
+    "renderer": {
+      "geometries": 36,
+      "textures": 44,
+      "calls": 22776,
+      "triangles": 814,
+      "points": 110,
+      "lines": 0
+    },
+    "particles": {
+      "capacity": 1200,
+      "activeCount": 0,
+      "allocatedObjects": 6,
+      "trailSegments": 2,
+      "mode": "gather"
+    },
+    "objects": {
+      "geometries": 36,
+      "materials": 39,
+      "textures": 44,
+      "sceneObjects": 72,
+      "poolCapacity": 1200
+    },
+    "heapUsedBytes": 37506706,
+    "rendererGeneration": 1
+  }
+}
