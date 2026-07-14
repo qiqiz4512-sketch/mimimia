@@ -1,6 +1,6 @@
 {
   "name": "mimimia",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -13,6 +13,9 @@
     "test:visual": "playwright test tests/visual --project=chromium-webgl2",
     "test:functional": "playwright test tests/e2e/full-flow.spec.ts",
     "test:acceptance": "node scripts/testing/run-acceptance.mjs",
+    "test:public": "node scripts/testing/run-public-suite.mjs",
+    "test:public:flow": "node scripts/testing/run-public-acceptance.mjs",
+    "test:public:focus": "node scripts/testing/run-public-focus-acceptance.mjs",
     "test:all": "npm run test:unit -- --run && npm run test:e2e",
     "assets:private-check": "node scripts/assets/verify-private-boundary.mjs",
     "assets:ledger-check": "node scripts/assets/verify-ledger.mjs",

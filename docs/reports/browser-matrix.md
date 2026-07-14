@@ -12,8 +12,11 @@
 | macOS 26.4 | Safari | 26.4 | WebGL 2 | 兼容 | 已完成 | 通过 |
 | Windows Server 2025 | Google Chrome 稳定版 | 149.0.7827.201 | WebGL 2 | 高 | 已完成 | 通过 |
 | Windows Server 2025 | Microsoft Edge 稳定版 | 149.0.4022.98 | WebGL 2 | 兼容 | 已完成 | 通过 |
+| GitHub Pages 公开网址 / macOS 26.4.1 | Google Chrome | 150.0.7871.115 | WebGL 2 | 高；受控低速依次降至均衡、兼容 | 已完成 | 通过 |
 
 “完整流程”包含：右键无效、提前松开消散、蓄满后继续按住、完整召唤、灵猫保持和看向鼠标、声音切换不打断、再次施法清空。
+
+公开网址补充行来自纯几何白金星阵版实际 Pages 地址，除完整流程外还覆盖加载、连续两次召唤与清空、三档自动降级、静音资源失败、关键角色资源重试后可恢复页面、窗口失焦消散和 5 秒完成画面帧率采样。原始记录见 [公开网址验收数据](evidence/mimimia-public-full-flow.json) 和 [真实标签页失焦记录](evidence/mimimia-public-focus-loss.json)。
 
 Firefox 152.0.5 是从 Mozilla 官方稳定通道临时挂载并通过原生 WebDriver 运行，版本来源为 [Mozilla Release 发布页](https://www.mozilla.org/en-US/firefox/notes/)。原始记录与画面见 [Firefox 数据](evidence/mimimia-firefox-152-full-flow.json) 和 [Firefox 完成画面](evidence/mimimia-firefox-152-complete.png)。
 

@@ -42,11 +42,13 @@ npm run release:verify
 - 在全新解包目录执行 `npm ci` 与正式构建；
 - 用静态服务器打开构建包，等待进入按钮并确认画布可见。
 
-## 发布 v1.0.0
+## 发布 v1.1.0
 
-最终回归与 Pages 验收通过后，已经创建 `v1.0.0` 标签和 [GitHub Release](https://github.com/qiqiz4512-sketch/mimimia/releases/tag/v1.0.0)，并附加：
+纯几何白金星阵改版完成最终回归与 Pages 验收后，创建 `v1.1.0` 标签和 GitHub Release，并附加：
 
-- `release/mimimia-source-v1.0.0.zip`
-- `release/mimimia-dist-v1.0.0.zip`
+- `release/mimimia-source-v1.1.0.zip`
+- `release/mimimia-dist-v1.1.0.zip`
+
+原始原型的 `v1.0.0` 标签与 Release 保留，不移动旧标签，也不以新版附件覆盖旧版历史。
 
 公开网址的空缓存下载量以及失败、成功、重置验收已经完成，结果保存在 `docs/reports/` 与 `docs/reports/release-checklist.md`。

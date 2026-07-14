@@ -18,8 +18,8 @@ import {
 
 const repositoryRoot = fileURLToPath(new URL('../../', import.meta.url));
 const releaseDirectory = path.join(repositoryRoot, 'release');
-const sourceArchive = path.join(releaseDirectory, 'mimimia-source-v1.0.0.zip');
-const distArchive = path.join(releaseDirectory, 'mimimia-dist-v1.0.0.zip');
+const sourceArchive = path.join(releaseDirectory, 'mimimia-source-v1.1.0.zip');
+const distArchive = path.join(releaseDirectory, 'mimimia-dist-v1.1.0.zip');
 const forbiddenRuntimeReference = /(?:\.superpowers[\\/]references|user-provided-witch-reference)/u;
 const textExtensions = new Set(['.css', '.csv', '.html', '.js', '.json', '.md', '.mjs', '.ts', '.tsx', '.txt', '.yml', '.yaml']);
 

@@ -1,0 +1,37 @@
+{
+  "measuredAt": "2026-07-14T15:53:07.991Z",
+  "url": "https://qiqiz4512-sketch.github.io/mimimia/",
+  "browser": {
+    "product": "Chrome/150.0.7871.115",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36"
+  },
+  "focusBefore": true,
+  "focusLost": true,
+  "focusRestored": true,
+  "focusEvents": {
+    "blur": 1,
+    "focus": 0,
+    "visibility": [
+      "hidden"
+    ]
+  },
+  "stateHistory": [
+    "entry",
+    "idle",
+    "charging",
+    "dissolving",
+    "idle"
+  ],
+  "final": {
+    "state": "idle",
+    "catVisible": "false",
+    "pillarCount": 0,
+    "activeParticles": 0
+  },
+  "checks": {
+    "realTabFocusLoss": true,
+    "dissolvedWithoutSummoning": true,
+    "restoredFocus": true,
+    "clearedSpellResources": true
+  }
+}

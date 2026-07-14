@@ -45,6 +45,12 @@ Chrome 高画质完成画面见 [WebGPU 完成截图](evidence/mimimia-webgpu-co
 
 Firefox 正式版完成画面见 [Firefox 完成截图](evidence/mimimia-firefox-152-complete.png)，构图与 Chrome 一致。
 
+## 实际公开网页画面
+
+纯几何白金星阵版上线后，再从正式网址实际蓄满并截图。高画质 WebGL 2 画面保留完整多重星格、精密刻线、暖白金外环、5 束纵向光柱、上升星尘和人物周围的柔光；人物脸部、服装与法杖仍清晰，没有被冲白。见 [公开蓄满画面](evidence/mimimia-public-geometric-starlight-charged.png)。
+
+完成召唤后法阵按时间线退场，灵猫保持在人物右肩上方并响应鼠标，见 [公开完成画面](evidence/mimimia-public-geometric-starlight-complete.png)。同一次线上验收记录到法阵蓄满时 9 次绘制、5 束光柱、24 个精密标记与 6 个环绕光点；完成后法阵透明度、光柱和活动粒子均回到 0。
+
 ## 视觉健康结论
 
 七个关键状态、三档画质和两个视口均健康；没有发现需要阻止发布的裁切、遮挡、错位、色偏或透明边缘问题。

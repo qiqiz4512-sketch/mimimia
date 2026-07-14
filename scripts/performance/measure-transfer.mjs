@@ -29,6 +29,7 @@ try {
   await session.send('Network.enable');
   await session.send('Network.setCacheDisabled', { cacheDisabled: true });
   const requests = new Map();
+  const failedRequests = [];
   session.on('Network.responseReceived', ({ requestId, response, type }) => {
     if (new URL(response.url).pathname.endsWith('.map')) return;
     requests.set(requestId, {
@@ -43,8 +44,28 @@ try {
     const request = requests.get(requestId);
     if (request) request.encodedBytes = encodedDataLength;
   });
+  session.on('Network.loadingFailed', ({ requestId, errorText, canceled }) => {
+    const request = requests.get(requestId);
+    failedRequests.push({
+      url: request?.url ?? requestId,
+      errorText,
+      canceled,
+    });
+  });
   await page.goto(baseUrl, { waitUntil: 'domcontentloaded', timeout: 120_000 });
-  await page.locator('[data-testid="enter-button"]:not([disabled])').waitFor({ timeout: 120_000 });
+  try {
+    await page.locator('[data-testid="enter-button"]:not([disabled])').waitFor({ timeout: 120_000 });
+  } catch (error) {
+    const diagnostics = await page.evaluate(() => ({
+      bodyDataset: { ...document.body.dataset },
+      bodyText: document.body.innerText,
+      focused: document.hasFocus(),
+      visibility: document.visibilityState,
+      readyState: document.readyState,
+    }));
+    console.error(`TRANSFER_ENTRY_DIAGNOSTICS ${JSON.stringify({ diagnostics, failedRequests })}`);
+    throw error;
+  }
   await page.waitForTimeout(250);
 
   const entries = [...requests.values()].filter(({ status, encodedBytes }) => status < 400 && encodedBytes > 0);
@@ -58,6 +79,7 @@ try {
   };
   for (const entry of entries) categories[category(entry.url)] += entry.encodedBytes;
   const totalEncodedBytes = Object.values(categories).reduce((sum, bytes) => sum + bytes, 0);
+  const passes = totalEncodedBytes <= LIMIT_BYTES && failedRequests.length === 0;
   const report = {
     measuredAt: new Date().toISOString(),
     url: baseUrl,
@@ -68,16 +90,18 @@ try {
     },
     cacheDisabled: true,
     readyState: await page.locator('body').getAttribute('data-experience-state'),
+    failedRequests,
     limitBytes: LIMIT_BYTES,
     totalEncodedBytes,
-    passes: totalEncodedBytes <= LIMIT_BYTES,
+    passes,
     categories,
     requests: entries.sort((left, right) => right.encodedBytes - left.encodedBytes),
   };
   const output = await writeJson(outputPath, report);
   console.log(`Transfer measurement written to ${output}`);
   console.log(JSON.stringify({ totalEncodedBytes, limitBytes: LIMIT_BYTES, passes: report.passes, categories }, null, 2));
-  if (!report.passes) throw new Error(`Encoded transfer ${totalEncodedBytes} bytes exceeds ${LIMIT_BYTES} bytes`);
+  if (failedRequests.length > 0) throw new Error(`Transfer measurement had failed requests: ${JSON.stringify(failedRequests)}`);
+  if (totalEncodedBytes > LIMIT_BYTES) throw new Error(`Encoded transfer ${totalEncodedBytes} bytes exceeds ${LIMIT_BYTES} bytes`);
   await context.close();
 } finally {
   await browser.close();

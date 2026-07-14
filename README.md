@@ -30,6 +30,14 @@ npm run assets:ledger-check
 npm run assets:size-check
 ```
 
+公开网址上线后，可用正式版 Chrome 重放十项线上验收并保存证据：
+
+```bash
+npm run test:public -- --url https://qiqiz4512-sketch.github.io/mimimia/
+```
+
+完整十项重放中的真实标签页失焦检查需要 macOS，并要求已安装正式版 Google Chrome。
+
 生成并验证交付包：
 
 ```bash
@@ -39,8 +47,8 @@ npm run release:verify
 
 输出位于 `release/`：
 
-- `mimimia-source-v1.0.0.zip`：完整源码、原创母图、分层文件、运行素材、测试和报告。
-- `mimimia-dist-v1.0.0.zip`：可由静态服务器直接托管的网页成品。
+- `mimimia-source-v1.1.0.zip`：完整源码、原创母图、分层文件、运行素材、测试和报告。
+- `mimimia-dist-v1.1.0.zip`：可由静态服务器直接托管的网页成品。
 
 ## 文档
 
@@ -53,6 +61,7 @@ npm run release:verify
 - [异常恢复报告](docs/reports/error-recovery-report.md)
 - [首次下载量报告](docs/reports/transfer-size-report.md)
 - [视觉审核报告](docs/reports/visual-review-report.md)
+- [最终发布清单](docs/reports/release-checklist.md)
 
 ## 权利说明
 

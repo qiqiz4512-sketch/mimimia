@@ -9,7 +9,7 @@ import { isGitLfsPointer, selectSourceFiles } from './release-helpers.mjs';
 
 const repositoryRoot = fileURLToPath(new URL('../../', import.meta.url));
 const releaseDirectory = path.join(repositoryRoot, 'release');
-const version = 'v1.0.0';
+const version = 'v1.1.0';
 const sourceArchive = path.join(releaseDirectory, `mimimia-source-${version}.zip`);
 const distArchive = path.join(releaseDirectory, `mimimia-dist-${version}.zip`);
 
