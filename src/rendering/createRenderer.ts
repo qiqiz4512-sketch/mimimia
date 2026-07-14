@@ -10,15 +10,36 @@ interface DetectableBackend {
   isWebGLBackend?: boolean;
 }
 
+export function requiresStableSafariWebGL(userAgent: string): boolean {
+  return /\bSafari\/[\d.]+/.test(userAgent)
+    && !/\b(?:Chrome|Chromium|CriOS|Edg|EdgiOS|Firefox|FxiOS|OPR)\//.test(userAgent);
+}
+
 export async function createRenderer(
   canvas: HTMLCanvasElement,
   options: CreateRendererOptions,
 ): Promise<RendererHandle> {
+  const stableSafariWebGL = requiresStableSafariWebGL(globalThis.navigator?.userAgent ?? '');
+  const stableSafariContext = stableSafariWebGL
+    ? canvas.getContext('webgl2', {
+        antialias: true,
+        alpha: true,
+        depth: true,
+        stencil: false,
+        preserveDrawingBuffer: true,
+        powerPreference: 'high-performance',
+      })
+    : null;
+  if (stableSafariWebGL && !stableSafariContext) {
+    throw new Error('Safari did not provide a stable WebGL 2 context');
+  }
+
   const renderer = new WebGPURenderer({
     canvas,
     antialias: true,
     alpha: false,
-    forceWebGL: options.forceWebGL,
+    forceWebGL: options.forceWebGL || stableSafariWebGL,
+    ...(stableSafariContext ? { context: stableSafariContext as never } : {}),
   });
   await renderer.init();
 

@@ -2,6 +2,8 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import { arch, platform, release, totalmem } from 'node:os';
 import { dirname, resolve } from 'node:path';
 
+import sharp from 'sharp';
+
 import { argument, ensureServer, LOCAL_URL, writeJson } from '../performance/browser-runtime.mjs';
 
 const webdriverUrl = argument('webdriver', 'http://127.0.0.1:4444');
@@ -27,6 +29,48 @@ async function command(path, method = 'GET', body) {
 }
 
 const wait = (milliseconds) => new Promise((resolveWait) => setTimeout(resolveWait, milliseconds));
+
+async function inspectSceneScreenshot(imageBuffer) {
+  const metadata = await sharp(imageBuffer).metadata();
+  if (!metadata.width || !metadata.height) throw new Error('Screenshot has no measurable dimensions');
+  const left = Math.round(metadata.width * 0.15);
+  const top = Math.round(metadata.height * 0.05);
+  const width = Math.max(1, Math.round(metadata.width * 0.7));
+  const height = Math.max(1, Math.round(metadata.height * 0.75));
+  const { data, info } = await sharp(imageBuffer)
+    .extract({ left, top, width, height })
+    .resize(96, 96, { fit: 'fill' })
+    .removeAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+
+  let brightPixels = 0;
+  let maximumLuminance = 0;
+  let luminanceTotal = 0;
+  let squaredLuminanceTotal = 0;
+  for (let offset = 0; offset < data.length; offset += info.channels) {
+    const luminance = data[offset] * 0.2126 + data[offset + 1] * 0.7152 + data[offset + 2] * 0.0722;
+    if (luminance >= 96) brightPixels += 1;
+    maximumLuminance = Math.max(maximumLuminance, luminance);
+    luminanceTotal += luminance;
+    squaredLuminanceTotal += luminance * luminance;
+  }
+  const pixelCount = info.width * info.height;
+  const meanLuminance = luminanceTotal / pixelCount;
+  const luminanceDeviation = Math.sqrt(
+    Math.max(0, squaredLuminanceTotal / pixelCount - meanLuminance * meanLuminance),
+  );
+  const brightPixelFraction = brightPixels / pixelCount;
+  return {
+    crop: { left, top, width, height },
+    sample: { width: info.width, height: info.height },
+    brightPixelFraction,
+    maximumLuminance,
+    meanLuminance,
+    luminanceDeviation,
+    passed: brightPixelFraction >= 0.01 && maximumLuminance >= 96,
+  };
+}
 
 async function waitUntil(check, label, timeout = 120_000) {
   const deadline = Date.now() + timeout;
@@ -136,11 +180,18 @@ try {
   }
 
   let screenshot = null;
+  let visualEvidence = null;
   if (screenshotPath) {
     screenshot = resolve(screenshotPath);
     await mkdir(dirname(screenshot), { recursive: true });
     const base64 = await command(session('/screenshot'));
-    await writeFile(screenshot, Buffer.from(base64, 'base64'));
+    const screenshotBuffer = Buffer.from(base64, 'base64');
+    await writeFile(screenshot, screenshotBuffer);
+    visualEvidence = await inspectSceneScreenshot(screenshotBuffer);
+    console.log(`VISUAL_EVIDENCE ${JSON.stringify(visualEvidence)}`);
+    if (!visualEvidence.passed) {
+      throw new Error('Completed summon screenshot does not contain visible scene highlights');
+    }
   }
 
   const runtime = await execute(`return {
@@ -189,6 +240,7 @@ try {
     runtime,
     reset,
     screenshot,
+    visualEvidence,
   };
   const output = await writeJson(outputPath, report);
   console.log(`${report.browser.name} full-flow report written to ${output}`);

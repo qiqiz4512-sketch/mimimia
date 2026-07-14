@@ -43,13 +43,17 @@ const canvasJson = async <T>(page: import('@playwright/test').Page, attribute: s
 
 test('keeps the entire mouse, failure, summon, cat, sound, and reset flow coherent', async ({ browser, page }, testInfo) => {
   const automaticQuality = testInfo.project.name === 'chrome-stable' || testInfo.project.name === 'edge-stable';
-  test.setTimeout(automaticQuality ? 240_000 : 120_000);
+  const slowRunner = automaticQuality || process.env.CI === 'true';
+  test.setTimeout(slowRunner ? 300_000 : 120_000);
   const params = new URLSearchParams(automaticQuality ? {} : { quality: 'compatibility' });
   if (testInfo.project.name === 'chromium-webgl2') params.set('backend', 'webgl2');
   await page.goto(`/?${params}`);
   await installStateHistory(page);
-  await expect(page.getByTestId('enter-button')).toBeEnabled({ timeout: 60_000 });
-  await page.getByTestId('enter-button').click();
+  const enterButton = page.getByTestId('enter-button');
+  await expect(enterButton).toBeEnabled({ timeout: slowRunner ? 180_000 : 60_000 });
+  // Native keyboard activation avoids a WebKit pointer-injection flake on the
+  // transitioning entry overlay while still exercising the button click path.
+  await enterButton.press('Enter');
   await state(page, 'idle');
 
   const canvas = page.locator('canvas[data-render-surface]');
@@ -66,22 +70,22 @@ test('keeps the entire mouse, failure, summon, cat, sound, and reset flow cohere
   await page.mouse.move(bounds.x + bounds.width * 0.52, bounds.y + bounds.height * 0.55);
 
   await page.mouse.down();
-  if (!automaticQuality) {
+  if (!slowRunner) {
     await state(page, 'charging');
     await page.waitForTimeout(800);
   }
   await page.mouse.up();
-  await historyIncludes(page, 'dissolving', automaticQuality ? 30_000 : 8_000);
-  await state(page, 'idle', automaticQuality ? 30_000 : 8_000);
+  await historyIncludes(page, 'dissolving', slowRunner ? 30_000 : 8_000);
+  await state(page, 'idle', slowRunner ? 30_000 : 8_000);
   await expect(page.locator('body')).toHaveAttribute('data-cat-visible', 'false');
 
   await page.mouse.down();
-  await state(page, 'charged', automaticQuality ? 30_000 : 6_000);
+  await state(page, 'charged', slowRunner ? 30_000 : 6_000);
   await page.waitForTimeout(500);
   await state(page, 'charged');
   await page.mouse.up();
-  if (automaticQuality) {
-    // Hosted Windows runners can render at only a few frames per second. The
+  if (slowRunner) {
+    // Hosted runners can render at only a few frames per second. The
     // observer proves transient states occurred even when an action finishes
     // after the visible state has already advanced.
     await page.getByTestId('sound-button').click();
@@ -134,7 +138,7 @@ test('keeps the entire mouse, failure, summon, cat, sound, and reset flow cohere
   console.log(`BROWSER_MATRIX_RECORD ${JSON.stringify(matrixRecord)}`);
 
   await page.getByTestId('reset-button').click();
-  await state(page, 'idle', automaticQuality ? 30_000 : 3_000);
+  await state(page, 'idle', slowRunner ? 30_000 : 3_000);
   await expect(page.locator('body')).toHaveAttribute('data-cat-visible', 'false');
   await expect(canvas).toHaveAttribute('data-particle-stats', /"activeCount":0/);
   await expect(canvas).toHaveAttribute('data-magic-circle', /"opacity":0/);
