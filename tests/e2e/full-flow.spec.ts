@@ -41,6 +41,14 @@ const canvasJson = async <T>(page: import('@playwright/test').Page, attribute: s
   return JSON.parse(value) as T;
 };
 
+const graphicsAvailability = (page: import('@playwright/test').Page) => page.evaluate(() => {
+  const probe = document.createElement('canvas');
+  return {
+    webgl2Available: Boolean(probe.getContext('webgl2')),
+    webgpuAvailable: 'gpu' in navigator,
+  };
+});
+
 test('keeps the entire mouse, failure, summon, cat, sound, and reset flow coherent', async ({ browser, page }, testInfo) => {
   const automaticQuality = testInfo.project.name === 'chrome-stable' || testInfo.project.name === 'edge-stable';
   const slowRunner = automaticQuality || process.env.CI === 'true';
@@ -51,6 +59,15 @@ test('keeps the entire mouse, failure, summon, cat, sound, and reset flow cohere
   if (testInfo.project.name === 'chromium-webgl2') params.set('backend', 'webgl2');
   await page.goto(`/?${params}`);
   await installStateHistory(page);
+  const graphics = await graphicsAvailability(page);
+  if (
+    process.env.CI === 'true'
+    && testInfo.project.name === 'firefox'
+    && !graphics.webgl2Available
+    && !graphics.webgpuAvailable
+  ) {
+    test.skip(true, 'Hosted Linux Firefox exposes neither WebGL 2 nor WebGPU; the recovery result is verified separately.');
+  }
   const enterButton = page.getByTestId('enter-button');
   try {
     await expect(enterButton).toBeEnabled({ timeout: slowRunner ? 180_000 : 60_000 });
@@ -161,4 +178,19 @@ test('keeps the entire mouse, failure, summon, cat, sound, and reset flow cohere
   await expect(page.locator('body')).toHaveAttribute('data-cat-visible', 'false');
   await expect(canvas).toHaveAttribute('data-particle-stats', /"activeCount":0/);
   await expect(canvas).toHaveAttribute('data-magic-circle', /"opacity":0/);
+});
+
+test('shows a recoverable result when hosted Firefox exposes no graphics backend', async ({ page }, testInfo) => {
+  test.skip(
+    process.env.CI !== 'true' || testInfo.project.name !== 'firefox',
+    'This environment contract only applies to hosted Linux Firefox.',
+  );
+
+  await page.goto('/?quality=compatibility');
+  const graphics = await graphicsAvailability(page);
+  expect(graphics).toEqual({ webgl2Available: false, webgpuAvailable: false });
+  await expect(page.getByText('图形环境暂时不可用')).toBeVisible({ timeout: 30_000 });
+  await expect(page.getByRole('button', { name: '重新加载' })).toBeEnabled();
+  await expect(page.locator('body')).toHaveAttribute('data-experience-state', 'loading');
+  console.log(`HOSTED_FIREFOX_GRAPHICS_RECOVERY ${JSON.stringify(graphics)}`);
 });
