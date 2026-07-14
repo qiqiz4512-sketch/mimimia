@@ -14,6 +14,12 @@ const readSummon = (page: import('@playwright/test').Page) => page.locator('canv
   JSON.parse((canvas as HTMLCanvasElement).dataset.summon ?? '{}') as SummonSnapshot);
 const readCat = (page: import('@playwright/test').Page) => page.locator('canvas[data-render-surface]').evaluate((canvas) =>
   JSON.parse((canvas as HTMLCanvasElement).dataset.cat ?? '{}') as { headDegrees: number; eyeOffsetFraction: number });
+const readCircle = (page: import('@playwright/test').Page) => page.locator('canvas[data-render-surface]').evaluate((canvas) =>
+  JSON.parse((canvas as HTMLCanvasElement).dataset.magicCircle ?? '{}') as {
+    releaseFlash: number;
+    pillarConvergence: number;
+    pillarCount: number;
+  });
 
 test('runs the complete shadow, fill, and shoulder movement timeline', async ({ page }) => {
   test.setTimeout(75_000);
@@ -27,7 +33,18 @@ test('runs the complete shadow, fill, and shoulder movement timeline', async ({ 
     await page.goto(`/?debug=1&experienceState=summoning&charge=1&summon=${elapsed / 2_600}`);
     await waitForSummon(page);
     expect(await readSummon(page)).toMatchObject(expected);
+    if (elapsed === 120) {
+      const release = await readCircle(page);
+      expect(release.releaseFlash).toBeGreaterThan(0);
+      expect(release.pillarConvergence).toBeGreaterThanOrEqual(0);
+      expect(release.pillarCount).toBeGreaterThan(0);
+    }
   }
+
+  await page.goto('/?debug=1&experienceState=summoning&charge=1&summon=0.9');
+  await waitForSummon(page);
+  expect((await readCircle(page)).releaseFlash).toBe(0);
+  await expect(page.locator('body')).toHaveAttribute('data-cat-visible', 'true');
 
   await page.goto('/?debug=1&experienceState=complete&charge=1&summon=1');
   await waitForSummon(page);

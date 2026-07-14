@@ -39,7 +39,14 @@ export default defineConfig({
     {
       name: 'chromium-webgl2',
       use: { ...devices['Desktop Chrome'] },
-      testMatch: ['e2e/full-flow.spec.ts', 'visual/**/*.spec.ts'],
+      testMatch: [
+        'e2e/full-flow.spec.ts',
+        'e2e/quality-selection.spec.ts',
+        'e2e/postprocessing.spec.ts',
+        'e2e/resource-errors.spec.ts',
+        'e2e/interruption.spec.ts',
+        'visual/**/*.spec.ts',
+      ],
     },
     {
       name: 'firefox',

@@ -22,17 +22,28 @@ import { PostProcessingHistoryReset } from './PostProcessingHistoryReset';
 
 export interface PostProcessingSnapshot extends PostProcessingFrame, PostProcessingTierConfig {
   quality: QualityTier;
-  renderPath: 'r185-render-pipeline';
+  renderPath: 'r185-render-pipeline' | 'direct-fallback';
 }
 
-function tierForProfile(profile: QualityProfile): QualityTier {
+export interface PostProcessingPort {
+  precompile(): Promise<void>;
+  setQuality(profile: QualityProfile): void;
+  update(signals: FrameSignals): void;
+  render(): void;
+  clearHistory(): void;
+  resize(width: number, height: number): void;
+  getSnapshot(): PostProcessingSnapshot;
+  dispose(): void;
+}
+
+export function tierForProfile(profile: QualityProfile): QualityTier {
   const entry = (Object.entries(QUALITY_PROFILES) as Array<[QualityTier, QualityProfile]>)
     .find(([, candidate]) => candidate === profile);
   if (!entry) throw new Error('Unknown quality profile');
   return entry[0];
 }
 
-export class PostProcessing {
+export class PostProcessing implements PostProcessingPort {
   readonly #renderer: WebGPURenderer;
   readonly #scene: Scene;
   readonly #camera: Camera;
@@ -92,8 +103,8 @@ export class PostProcessing {
   update(signals: FrameSignals): void {
     this.#frame = getPostProcessingFrame(signals, this.#profile);
     this.#bloom.strength.value = this.#frame.bloomStrength;
-    this.#bloom.radius.value = 0.24 + Math.min(1, this.#frame.energy) * 0.16;
-    this.#bloom.threshold.value = 0.68;
+    this.#bloom.radius.value = 0.32 + Math.min(1, this.#frame.energy) * 0.18;
+    this.#bloom.threshold.value = 0.58;
     this.#distortionControls.strength.value = this.#frame.distortionStrength;
     this.#distortionControls.timeSeconds.value = this.#frame.distortionTimeSeconds;
     this.#chromaticStrength.value = this.#frame.chromaticAberration;

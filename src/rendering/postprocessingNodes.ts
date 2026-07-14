@@ -52,29 +52,38 @@ export function getPostProcessingTierConfig(profile: QualityProfile): PostProces
 
 export function getPostProcessingFrame(signals: FrameSignals, profile: QualityProfile): PostProcessingFrame {
   let energy = 0;
+  let releaseFlash = 0;
   if (signals.state === 'charging' || signals.state === 'charged') {
-    energy = smooth((signals.charge - EXPERIENCE_TIMING.chargePhase2End) / (1 - EXPERIENCE_TIMING.chargePhase2End));
+    energy = signals.charge <= 0.68
+      ? 0
+      : smooth((signals.charge - EXPERIENCE_TIMING.chargePhase2End) / (1 - EXPERIENCE_TIMING.chargePhase2End));
   } else if (signals.state === 'dissolving') {
     const chargedEnergy = smooth((signals.charge - EXPERIENCE_TIMING.chargePhase2End) / (1 - EXPERIENCE_TIMING.chargePhase2End));
     energy = chargedEnergy * (1 - smooth(signals.dissolve));
   } else if (signals.state === 'summoning') {
     const elapsedMs = clamp01(signals.summon) * EXPERIENCE_TIMING.summonEndMs;
+    const flashIn = smooth(elapsedMs / EXPERIENCE_TIMING.releaseHoldMs);
+    const flashOut = 1 - smooth((elapsedMs - 220) / 200);
+    releaseFlash = flashIn * flashOut;
     const fill = clamp01((elapsedMs - EXPERIENCE_TIMING.fillStartMs)
       / (EXPERIENCE_TIMING.fillEndMs - EXPERIENCE_TIMING.fillStartMs));
-    energy = 0.78 + Math.sin(Math.PI * fill) * 0.44;
+    const fieldEnergy = 0.72 + Math.sin(Math.PI * fill) * 0.34;
+    const retreat = 1 - smooth((elapsedMs - EXPERIENCE_TIMING.fillEndMs)
+      / (EXPERIENCE_TIMING.catMoveEndMs - EXPERIENCE_TIMING.fillEndMs));
+    energy = 0.16 + (fieldEnergy - 0.16) * retreat;
   } else if (signals.state === 'complete') {
     energy = 0.16;
   }
 
   const distortionMultiplier = profile.distortion === 'full' ? 1 : profile.distortion === 'light' ? 0.42 : 0;
-  const bloomMultiplier = 0.14 + Math.min(1.25, energy) * 0.17;
+  const bloomMultiplier = 0.16 + Math.min(1.1, energy) * 0.42 + releaseFlash * 0.42;
   return {
     energy,
-    bloomStrength: profile.bloomStrength * bloomMultiplier,
+    bloomStrength: Math.min(profile.bloomStrength, profile.bloomStrength * bloomMultiplier),
     distortionStrength: distortionMultiplier * energy * 0.0028,
     distortionTimeSeconds: Math.max(0, signals.nowMs) / 1_000,
-    chromaticAberration: profile.chromaticAberration * Math.min(1, energy) * 0.25,
-    afterImageDamp: profile.trails === 'fullscreen-and-4-particle' ? 0.18 + Math.min(1, energy) * 0.68 : 0,
+    chromaticAberration: profile.chromaticAberration * Math.min(1, energy) * 0.18,
+    afterImageDamp: profile.trails === 'fullscreen-and-4-particle' ? 0.18 + Math.min(1, energy) * 0.58 : 0,
   };
 }
 

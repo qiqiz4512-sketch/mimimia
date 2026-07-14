@@ -1,22 +1,27 @@
 import { expect, test } from '@playwright/test';
 
+import { withBackend } from '../helpers/withBackend';
+
 async function waitForEntry(page: import('@playwright/test').Page) {
   await expect(page.getByTestId('enter-button')).toBeEnabled({ timeout: 35_000 });
 }
 
-test('keeps the opaque loading view closed through a real uninterrupted three-second benchmark', async ({ page }) => {
+test('keeps the opaque loading view closed through a real uninterrupted three-second benchmark', async ({ page }, testInfo) => {
   test.setTimeout(60_000);
-  await page.goto('/');
+  await page.goto(withBackend('/', testInfo.project.name));
   await page.locator('body[data-load-progress="1"]').waitFor({ timeout: 25_000 });
   await expect(page.getByTestId('loading-status')).toContainText('正在校准月光');
   await expect(page.getByTestId('enter-button')).toBeDisabled();
   await waitForEntry(page);
+  if (testInfo.project.name === 'chromium-webgl2') {
+    await expect(page.locator('body')).toHaveAttribute('data-render-backend', 'webgl2');
+  }
   await expect(page.locator('body')).toHaveAttribute('data-quality-tier', /^(high|balanced|compatibility)$/);
   const durationMs = Number(await page.locator('body').getAttribute('data-quality-benchmark-duration'));
   expect(durationMs).toBeGreaterThanOrEqual(3_000);
 });
 
-test('selects the exact high, balanced, and compatibility benchmark boundaries', async ({ page }) => {
+test('selects the exact high, balanced, and compatibility benchmark boundaries', async ({ page }, testInfo) => {
   test.setTimeout(140_000);
   for (const [fps, tier, label] of [
     [45, 'high', '高画质'],
@@ -24,7 +29,7 @@ test('selects the exact high, balanced, and compatibility benchmark boundaries',
     [30, 'balanced', '均衡画质'],
     [29.9, 'compatibility', '兼容画质'],
   ] as const) {
-    await page.goto(`/?benchmarkFps=${fps}`);
+    await page.goto(withBackend(`/?benchmarkFps=${fps}`, testInfo.project.name));
     await waitForEntry(page);
     await expect(page.locator('body')).toHaveAttribute('data-quality-tier', tier);
     await expect(page.locator('body')).toHaveAttribute('data-quality-forced', 'false');
@@ -32,9 +37,9 @@ test('selects the exact high, balanced, and compatibility benchmark boundaries',
   }
 });
 
-test('holds a pending downgrade during a spell and applies exactly one tier when safe', async ({ page }) => {
+test('holds a pending downgrade during a spell and applies exactly one tier when safe', async ({ page }, testInfo) => {
   test.setTimeout(80_000);
-  await page.goto('/?benchmarkFps=45&qualityTest=1&backend=webgl2');
+  await page.goto(withBackend('/?benchmarkFps=45&qualityTest=1&backend=webgl2', testInfo.project.name));
   await waitForEntry(page);
   await page.getByTestId('enter-button').click();
   await expect(page.locator('body')).toHaveAttribute('data-experience-state', 'idle');
@@ -64,8 +69,8 @@ test('holds a pending downgrade during a spell and applies exactly one tier when
   expect(particleStats).toMatchObject({ quality: 'balanced', drawCalls: 3 });
 });
 
-test('keeps a forced debug tier stable and reports the real backend and runtime statistics', async ({ page }) => {
-  await page.goto('/?debug=1&quality=balanced&backend=webgl2');
+test('keeps a forced debug tier stable and reports the real backend and runtime statistics', async ({ page }, testInfo) => {
+  await page.goto(withBackend('/?debug=1&quality=balanced&backend=webgl2', testInfo.project.name));
   const panel = page.getByTestId('debug-panel');
   await expect(panel).toBeVisible({ timeout: 20_000 });
   await expect(panel).toContainText('BACKEND  WEBGL2');

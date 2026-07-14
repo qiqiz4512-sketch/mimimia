@@ -42,10 +42,26 @@ describe('r185 postprocessing configuration', () => {
     expect(charged.bloomStrength).toBeGreaterThanOrEqual(phaseThree.bloomStrength);
     expect(reveal.bloomStrength).toBeGreaterThan(charged.bloomStrength);
     expect(dissolve.bloomStrength).toBeLessThan(phaseThree.bloomStrength);
-    expect(charged.bloomStrength).toBeLessThanOrEqual(0.36);
-    expect(reveal.bloomStrength).toBeLessThanOrEqual(0.42);
+    expect(charged.bloomStrength).toBeLessThanOrEqual(0.72);
+    expect(reveal.bloomStrength).toBeLessThanOrEqual(1.1);
     expect(charged.distortionStrength).toBeLessThanOrEqual(0.003);
     expect(charged.chromaticAberration).toBeLessThanOrEqual(0.04);
+  });
+
+  it('raises warm-field bloom only after the second charge boundary', () => {
+    const before = getPostProcessingFrame(frame('charging', 0.68), QUALITY_PROFILES.high);
+    const charged = getPostProcessingFrame(frame('charged', 1), QUALITY_PROFILES.high);
+    expect(before.energy).toBe(0);
+    expect(charged.energy).toBe(1);
+    expect(charged.bloomStrength).toBeGreaterThan(before.bloomStrength);
+    expect(charged.bloomStrength).toBeLessThanOrEqual(0.72);
+  });
+
+  it('creates a short release flash and then returns below the flash peak', () => {
+    const flash = getPostProcessingFrame(frame('summoning', 1, 0, 120 / 2600), QUALITY_PROFILES.high);
+    const fill = getPostProcessingFrame(frame('summoning', 1, 0, 900 / 2600), QUALITY_PROFILES.high);
+    expect(flash.bloomStrength).toBeGreaterThan(fill.bloomStrength);
+    expect(flash.bloomStrength).toBeLessThanOrEqual(1.1);
   });
 
   it('ties spatial distortion phase to the supplied frame time', () => {

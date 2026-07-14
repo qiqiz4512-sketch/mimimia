@@ -86,3 +86,26 @@ test('unlocks real Web Audio on click and keeps mute independent from the animat
     lastSignals: { state: 'summoning', charge: 1, summon: 0 },
   });
 });
+
+test('mute never changes the spell phase', async ({ page }) => {
+  await page.goto('/?quality=compatibility');
+  await expect(page.getByTestId('enter-button')).toBeEnabled({ timeout: 35_000 });
+  await page.getByTestId('enter-button').click();
+  await expect(page.locator('body')).toHaveAttribute('data-experience-state', 'idle');
+  const canvas = page.locator('canvas[data-render-surface]');
+  const bounds = await canvas.boundingBox();
+  if (!bounds) throw new Error('render canvas has no bounds');
+  await page.mouse.move(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
+  await page.mouse.down();
+  await expect(page.locator('body')).toHaveAttribute('data-experience-state', 'charged', { timeout: 5_000 });
+  const before = JSON.parse(await canvas.getAttribute('data-magic-circle') ?? '{}');
+  await page.getByTestId('sound-button').click();
+  const after = JSON.parse(await canvas.getAttribute('data-magic-circle') ?? '{}');
+  expect(after).toMatchObject({
+    ringProgress: before.ringProgress,
+    latticeProgress: before.latticeProgress,
+    detailProgress: before.detailProgress,
+    fieldProgress: before.fieldProgress,
+  });
+  await page.mouse.up();
+});

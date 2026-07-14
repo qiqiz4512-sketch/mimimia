@@ -3,8 +3,9 @@ import type { CharacterDebugPose } from '../character/MagicalGirlRig';
 import { WarmupController } from '../performance/WarmupController';
 import type { WarmupReport } from '../performance/performanceTypes';
 import { QUALITY_PROFILES, type QualityTier } from '../quality/qualityProfiles';
+import { createPostProcessing } from '../rendering/createPostProcessing';
 import { createRenderer } from '../rendering/createRenderer';
-import { PostProcessing } from '../rendering/PostProcessing';
+import type { PostProcessingPort } from '../rendering/PostProcessing';
 import type { RendererHandle } from '../rendering/renderingTypes';
 import { Stage } from '../stage/Stage';
 
@@ -16,6 +17,7 @@ export interface CreateExperienceOptions {
   characterPose?: CharacterDebugPose;
   showCat?: boolean;
   hideParticles?: boolean;
+  injectPostProcessingFailure?: boolean;
   onRendererReady?: (handle: RendererHandle) => void;
   onWarmupReady?: (report: WarmupReport) => void;
 }
@@ -23,7 +25,7 @@ export interface CreateExperienceOptions {
 export interface ExperienceRuntime {
   readonly renderer: RendererHandle;
   readonly stage: Stage;
-  readonly postProcessing: PostProcessing;
+  readonly postProcessing: PostProcessingPort;
   readonly audio: AudioController;
   readonly quality: QualityTier;
   setQuality(quality: QualityTier): void;
@@ -39,7 +41,7 @@ export async function createExperience(options: CreateExperienceOptions): Promis
   });
   let renderer: RendererHandle | null = null;
   let audio: AudioController | null = null;
-  let postProcessing: PostProcessing | null = null;
+  let postProcessing: PostProcessingPort | null = null;
 
   try {
     renderer = await createRenderer(options.canvas, {
@@ -52,11 +54,12 @@ export async function createExperience(options: CreateExperienceOptions): Promis
     const handle = renderer;
     const controller = audio;
 
-    postProcessing = new PostProcessing(
+    postProcessing = await createPostProcessing(
       handle.renderer,
       stage.scene,
       stage.cameraRig.camera,
       QUALITY_PROFILES[options.quality],
+      options.injectPostProcessingFailure,
     );
     const resize = (width: number, height: number) => {
       handle.resize(width, height);
@@ -64,8 +67,6 @@ export async function createExperience(options: CreateExperienceOptions): Promis
       postProcessing?.resize(width, height);
     };
     resize(window.innerWidth, window.innerHeight);
-    await postProcessing.precompile();
-
     const warmup = new WarmupController({
       prepareTextures: async () => {
         for (const texture of stage.getCharacterTextures()) handle.renderer.initTexture(texture);

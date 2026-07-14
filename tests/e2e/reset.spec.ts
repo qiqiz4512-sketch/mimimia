@@ -38,6 +38,8 @@ test('cleans the previous spell completely while retaining assets, renderer, poo
   await expect(page.locator('body')).toHaveAttribute('data-renderer-generation', '1');
   await expect(canvas).toHaveAttribute('data-camera-distance', baselineCamera ?? '');
   await expect(canvas).toHaveAttribute('data-magic-circle', /"opacity":0/);
+  await expect(canvas).toHaveAttribute('data-magic-circle', /"pillarCount":0/);
+  await expect(canvas).toHaveAttribute('data-magic-circle', /"releaseFlash":0/);
   await expect(canvas).toHaveAttribute('data-particle-stats', /"activeCount":0/);
   await expect(canvas).toHaveAttribute('data-postprocessing', /"energy":0/);
   await expect(canvas).toHaveAttribute('data-audio', /"ambientLoopStarts":1/);
