@@ -4,7 +4,7 @@
 
 网页使用相对资源路径，可发布在仓库子路径下。`main` 分支的持续检查全部通过后，`.github/workflows/deploy.yml` 会重新构建并把 `dist/` 发布到 GitHub Pages。
 
-首次设置仓库时，在 GitHub 的 Pages 设置中选择“GitHub Actions”作为来源。计划网址为：
+首次设置仓库时，在 GitHub 的 Pages 设置中选择“GitHub Actions”作为来源。当前公开网址为：
 
 `https://qiqiz4512-sketch.github.io/mimimia/`
 
@@ -44,9 +44,9 @@ npm run release:verify
 
 ## 发布 v1.0.0
 
-在最终回归通过、Pages 可访问后创建 `v1.0.0` 标签和 GitHub Release，并附加：
+最终回归与 Pages 验收通过后，已经创建 `v1.0.0` 标签和 [GitHub Release](https://github.com/qiqiz4512-sketch/mimimia/releases/tag/v1.0.0)，并附加：
 
 - `release/mimimia-source-v1.0.0.zip`
 - `release/mimimia-dist-v1.0.0.zip`
 
-公开网址还需执行空缓存下载量和一轮失败、成功、重置验收，结果写回 `docs/reports/` 与 `docs/reports/release-checklist.md`。
+公开网址的空缓存下载量以及失败、成功、重置验收已经完成，结果保存在 `docs/reports/` 与 `docs/reports/release-checklist.md`。

@@ -2,7 +2,7 @@
 
 一个可直接在浏览器中体验的原创魔法少女召唤原型。按住鼠标凝聚月光；提前松开会柔和消散，蓄满后松开则召唤月辉灵猫。灵猫会保持在场并看向鼠标，再次施法可完整重置。
 
-公开体验（发布完成后生效）：[https://qiqiz4512-sketch.github.io/mimimia/](https://qiqiz4512-sketch.github.io/mimimia/)
+公开体验：[https://qiqiz4512-sketch.github.io/mimimia/](https://qiqiz4512-sketch.github.io/mimimia/)
 
 ## 浏览器要求
 
