@@ -49,7 +49,7 @@ const faultAttempts = new Map<string, number>();
 const loadManifest: readonly AssetManifestEntry[] = fault === 'decorative'
   ? [...ASSET_MANIFEST, {
     id: 'optional-debug-moon-glint',
-    url: '/assets/optional/debug-moon-glint.json',
+    url: 'assets/optional/debug-moon-glint.json',
     kind: 'decoration',
     critical: false,
     bytes: 64,

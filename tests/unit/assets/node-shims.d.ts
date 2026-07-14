@@ -20,6 +20,7 @@ declare module 'node:child_process' {
 }
 
 declare module 'node:fs/promises' {
+  export function readFile(path: string | URL, encoding: 'utf8'): Promise<string>;
   export function mkdtemp(prefix: string): Promise<string>;
   export function mkdir(path: string, options?: { recursive?: boolean }): Promise<string | undefined>;
   export function rm(path: string, options?: { recursive?: boolean; force?: boolean }): Promise<void>;

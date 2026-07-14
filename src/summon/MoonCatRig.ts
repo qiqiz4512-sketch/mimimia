@@ -6,7 +6,7 @@ import { LayeredSpriteRig } from '../character/LayeredSpriteRig';
 import { CatGazeController } from './CatGazeController';
 import { applyCatRevealNodes, type CatRevealControls } from './catRevealNodes';
 
-const BASE_URL = '/assets/characters/moon-cat/';
+const BASE_URL = 'assets/characters/moon-cat/';
 const clamp01 = (value: number) => Math.min(1, Math.max(0, value));
 
 export class MoonCatRig {

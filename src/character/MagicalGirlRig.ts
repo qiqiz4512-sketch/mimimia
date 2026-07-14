@@ -7,7 +7,7 @@ import { LayeredSpriteRig } from './LayeredSpriteRig';
 
 export type CharacterDebugPose = 'min' | 'idle' | 'max';
 
-const BASE_URL = '/assets/characters/magical-girl/';
+const BASE_URL = 'assets/characters/magical-girl/';
 const clamp01 = (value: number) => Math.min(1, Math.max(0, value));
 const smoothstep = (value: number) => {
   const amount = clamp01(value);
